@@ -16,6 +16,7 @@ import iso8583.IsoMessageType;
 import iss.showLogEnum;
 import java.security.MessageDigest;
 import java.text.NumberFormat;
+import java.util.Random;
 import unisim201401.systemLoader;
 
 /**
@@ -790,6 +791,12 @@ public class CommonLib {
 
         }
         return rs;
+    }
+
+    public static String getAmmount(int minAmm, int maxAmm, int lengthAmm) {
+        Random rand = new Random();
+        int amm = rand.nextInt(Math.abs(maxAmm - minAmm));
+        return CommonLib.formatIntToString(minAmm + amm,lengthAmm);
     }
 
 }
