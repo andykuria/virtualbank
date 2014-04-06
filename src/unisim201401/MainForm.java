@@ -20,6 +20,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Vector;
 import javax.swing.BorderFactory;
@@ -620,7 +621,7 @@ public class MainForm extends javax.swing.JFrame {
             String msgCode = instCmb.substring(0, instCmb.indexOf("("));
             String xmlFile = instCmb.substring(instCmb.indexOf("(") + 1, instCmb.length() - 1);
             cfgNode tmpNode = systemData.getPatternObj().getTempNode(xmlFile, msgCode);
-            HashMap<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
+            Map<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
             buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
             System.out.println(controlFieldPatterns.keySet());
             for (Entry<String, fieldParser> entry : controlFieldPatterns.entrySet()) {
@@ -672,6 +673,11 @@ public class MainForm extends javax.swing.JFrame {
                     case AUTO_TRACE:
                         buildMessage.setField(CommonLib.valueOf(key), CommonLib.getSystemTrace());
                         break;
+                    case AUTO_AMMOUNT:
+                        String[] amms = value.getFieldValue().split("-");
+                        int minAmm = CommonLib.valueOf(amms[0]);
+                        int maxAmm = CommonLib.valueOf(amms[1]);
+                        buildMessage.setField(CommonLib.valueOf(key), CommonLib.getAmmount(minAmm, maxAmm, 12));
                     case AUTO_BITMAP:
                         break;
                     case AUTO_ZPK:

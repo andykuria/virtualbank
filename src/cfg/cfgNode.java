@@ -7,12 +7,14 @@ package cfg;
 
 import datamanager.fieldParser;
 import datamanager.fieldType;
-import java.util.ArrayList;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
+
 import lib.CommonLib;
 
 /**
@@ -78,8 +80,8 @@ public class cfgNode {
         return nodeFilter;
     }
 
-    public HashMap<String, fieldParser> getFieldPatternFromNode() {
-        HashMap<String, fieldParser> nodePattern = new HashMap<>();
+    public Map<String, fieldParser> getFieldPatternFromNode() {
+        Map<String, fieldParser> nodePattern = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : nodeValues.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -92,8 +94,8 @@ public class cfgNode {
         return nodePattern;
     }
 
-    public HashMap<String, fieldParser> getFieldPatternFromNode(Vector<fieldType> fieldFilter) {
-        HashMap<String, fieldParser> nodePattern = new HashMap<>();
+    public LinkedHashMap<String, fieldParser> getFieldPatternFromNode(Vector<fieldType> fieldFilter) {
+        LinkedHashMap<String, fieldParser> nodePattern = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : nodeValues.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -195,7 +197,7 @@ public class cfgNode {
     }
 
     public List<String> getFieldKeys() {
-        List<String> fieldKeys = new ArrayList<>();
+        List<String> fieldKeys = new LinkedList<>();
         if (nodeValues != null) {
             fieldKeys.addAll(nodeValues.keySet());
         }

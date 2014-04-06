@@ -96,7 +96,10 @@ public class fieldParser {
                             break;
                         case 71812: //'HSM'
                             type = fieldType.AUTO_HSM;
-
+                            break;
+                        case 12://AM
+                            type = fieldType.AUTO_AMMOUNT;
+                            fieldValue = fieldParts[2];
                             break;
 
                     }
