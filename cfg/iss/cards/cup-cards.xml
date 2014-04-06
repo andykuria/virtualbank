@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<UNI_SIM type="CARD" SCOPE="CUP">
+        <organization name="6210940000001">
+                <field name="EXPDATE">08/2014</field>
+                <field name="PIN">123456</field>
+                <field name="AvaiBalance">000080000000</field>
+                <field name="Balance">000120000000</field>
+                <field name="RC">00</field>
+	</organization>
+</UNI_SIM>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<UNI_SIM type="CARD" >
+    <organization name="HEADER" type="HEADER">
+
+
+        <field name="INSTITUTIONCODE">IST</field> 
+
+    </organization>
+
+        <organization name="9704050667570076">
+                <field name="EXPDATE">08/2014</field>
+                <field name="PIN">123456</field>
+                <field name="AvaiBalance">000080000000</field>
+                <field name="Balance">000120000000</field>
+                <field name="AUTHCODE">0001</field>
+                <field name="RC">00</field>
+	</organization>
+</UNI_SIM>

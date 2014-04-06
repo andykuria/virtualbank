@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UNI_SIM type="ISS_RESPONSE">
+
+    <organization name="HEADER" type="HEADER">
+        <field name="SCOPE">IST</field> 
+
+        <field name="INSTITUTIONCODE">IST</field> 
+        <field name="CARDS">agribank-cards.xml</field> 
+    </organization>
+
+    <organization name="BAL" scope="IST" type="FINACIAL">
+        <field name="0">0210</field> 
+        <field name="1">AT::BM</field> 
+        <field name="2">OR</field> 
+        <field name="3">OR</field> 
+        <field name="4">OR</field> 
+        <field name="7">OR</field> 
+        <field name="11">OR</field> 
+        <field name="12">OR</field> 
+        <field name="13">OR</field> 
+        <field name="15">OR</field> 
+        <field name="18">OR</field> 
+        <field name="19">OR</field> 
+        <field name="22">OR</field> 
+        <field name="25">OR</field> 
+        <field name="32">OR</field> 
+        <field name="37">OR</field> 
+	<field name="39">AT::RC</field> 
+        <field name="41">OR</field> 
+        <field name="42">OR</field> 
+        <field name="49">OR</field> 
+        <field name="54">AT::TA::1001704C{AB}1001704C{B}</field> 
+    </organization>
+    <organization name="CW" scope="IST" type="FINACIAL">
+        <field name="0">0210</field> 
+        <field name="1">AT::BM</field> 
+        <field name="2">OR</field> 
+        <field name="3">OR</field> 
+        <field name="4">OR</field> 
+        <field name="7">OR</field> 
+        <field name="11">OR</field> 
+        <field name="12">OR</field> 
+        <field name="13">OR</field> 
+        <field name="15">OR</field> 
+        <field name="18">OR</field> 
+        <field name="19">OR</field> 
+        <field name="22">OR</field> 
+        <field name="25">OR</field> 
+        <field name="32">OR</field> 
+        <field name="37">OR</field> 
+	<field name="39">AT::RC</field> 
+        <field name="41">OR</field> 
+        <field name="42">OR</field> 
+        <field name="49">OR</field> 
+        <field name="54">AT::TA::1001704C{AB}1001704C{B}</field> 
+    </organization>
+    <organization name="SIGNOFF" scope="IST" type="NETWORK">
+        <field name="0">0810</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">OR</field> 
+        <field name="11">OR</field> 
+        <field name="32">OR</field> 
+	<field name="39">00</field> 
+        <field name="70">OR</field> 
+    </organization>
+    <organization name="SIGNON" scope="IST" type="NETWORK">
+        <field name="0">0810</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">OR</field> 
+        <field name="11">OR</field> 
+        <field name="32">OR</field> 
+	<field name="39">00</field> 
+        <field name="70">OR</field> 
+    </organization>
+    <organization name="ECHO" scope="IST" type="NETWORK">
+        <field name="0">0810</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">OR</field> 
+        <field name="11">OR</field> 
+        <field name="32">OR</field> 
+	<field name="39">00</field> 
+        <field name="70">OR</field> 
+    </organization>
+    <organization name="NEWKEY" scope="IST" type="NETWORK">
+        <field name="0">0810</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">OR</field> 
+        <field name="11">OR</field> 
+        <field name="32">OR</field> 
+	<field name="39">00</field> 
+        <field name="70">OR</field> 
+    </organization>
+    <organization name="REVERSAL" scope="IST" type="REVERSAL">
+        <field name="0">0430</field> 
+        <field name="1">AT::BM</field> 
+        <field name="2">OR</field> 
+        <field name="3">OR</field> 
+        <field name="4">OR</field> 
+        <field name="7">OR</field> 
+        <field name="11">OR</field> 
+        <field name="12">OR</field> 
+        <field name="13">OR</field> 
+        <field name="15">OR</field> 
+        <field name="18">OR</field> 
+        <field name="19">OR</field> 
+        <field name="22">OR</field> 
+        <field name="25">OR</field> 
+        <field name="32">OR</field> 
+        <field name="37">OR</field> 
+        <field name="39">00</field> 
+        <field name="41">OR</field> 
+        <field name="42">OR</field> 
+        <field name="49">OR</field> 
+        <field name="102">00000000000000000000</field> 
+
+    </organization>
+    
+</UNI_SIM>

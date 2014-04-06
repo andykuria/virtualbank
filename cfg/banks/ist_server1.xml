@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<UNI_SIM type="BANK">
+        <organization name="INSTITUTION">
+                <field name="MODE">DUPLEX_SERVER</field>
+		    <field name="DATAMODE">ASCII</field>
+		    <field name="LINEMODE">ASCII</field>
+                <field name="INTERFACECODE">GPB</field>
+                <field name="BIN">602907</field>
+                <field name="PAN">970430</field>
+	          <field name="PORT">10080</field>
+		    <field name="LOCALPORT">0</field>
+		    <field name="ETX"/>
+      	    <field name="ISO_CFG">ist_iso_cfg.xml</field>
+      	    <field name="ZMK">75B07ADA136F41E6E5B9A1D2F1588C5D</field>
+		    <field name="ZPK">921034EE2527D4C597E7E07CFA15B96C</field>
+		    <field name="TAK">F90AF369FDF43D3F8BEDFB8B406F34B0</field>
+	</organization>
+</UNI_SIM>

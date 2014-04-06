@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UNI_SIM type="PATTRENDATA">
+    <organization name="HEADER" type="HEADER">
+        <field name="des">970400123456789-CW</field> 
+        <field name="type">TMP</field> 
+        <field name="SCOPE">IST</field> 
+        <field name="BINARY_FIELDS">1 48 52 64 96 128</field> 
+        <field name="ACQ_CARDS">CL01</field> 
+        <field name="CL01">6210940000001=49121213715950580000001,6210940000001=49121213715950580000001,9704050667570076=49121213715950580000001,9704140003000425878=49121213715950580000001</field> 
+    </organization>
+    <organization name="CW-VND" zone="0200" follow="GEN_PIN" des="IST" type="FINACIAL" rev="REV-01">
+        <field name="0">0200</field> 
+        <field name="1">AT::BM</field> 
+        <field name="2">AT::PAN</field> 
+        <field name="3">010000</field> 
+        <field name="4">MN::IN::000040000000</field> 
+        <field name="7">AT::DT</field> 
+        <field name="11">AT::TR</field> 
+        <field name="12">AT::T</field> 
+        <field name="13">AT::D</field> 
+        <field name="15">AT::D</field> 
+        <field name="18">6012</field> 
+        <field name="19">MN::IN::704</field> 
+        <field name="22">021</field> 
+        <field name="25">00</field> 
+        <field name="32">602907</field> 
+        <field name="35">AT::TC</field> 
+        <field name="37">AT::SEQ</field> 
+        <field name="41">00000001</field> 
+        <field name="42">A              </field> 
+        <field name="43">                                 ICB 704</field> 
+        <field name="49">MN::IN::704</field> 
+        <field name="52">FA0A0ABBFFAABBCC</field> 
+    </organization>
+    <organization name="CW-USD" zone="0200" follow="GEN_PIN" des="IST" type="FINACIAL" rev="REV-01">
+        <field name="0">0200</field> 
+        <field name="1">AT::BM</field> 
+        <field name="2">AT::PAN</field> 
+        <field name="3">010000</field> 
+        <field name="4">MN::IN::000040000000</field> 
+        <field name="7">AT::DT</field> 
+        <field name="11">AT::TR</field> 
+        <field name="12">AT::T</field> 
+        <field name="13">AT::D</field> 
+        <field name="15">AT::D</field> 
+        <field name="18">6012</field> 
+        <field name="19">MN::IN::704</field> 
+        <field name="22">021</field> 
+        <field name="25">00</field> 
+        <field name="32">602907</field> 
+        <field name="35">AT::TC</field> 
+        <field name="37">AT::SEQ</field> 
+        <field name="41">00000001</field> 
+        <field name="42">A              </field> 
+        <field name="43">                                 ICB 704</field> 
+        <field name="49">MN::IN::840</field> 
+        <field name="52">MN::HSM::123456</field> 
+    </organization>
+    <organization name="SIGNON" zone="0800" follow="" des="IST" type="NETWORK" >
+        <field name="0">0800</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">AT::DT</field> 
+        <field name="11">AT::TR</field> 
+        <field name="32">602907</field> 
+        <field name="70">001</field> 
+    </organization>
+    <organization name="SIGNOFF" zone="0800" follow="" des="IST" type="NETWORK" >
+        <field name="0">0800</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">AT::DT</field> 
+        <field name="11">AT::TR</field> 
+        <field name="32">602907</field> 
+        <field name="70">002</field> 
+    </organization>
+    <organization name="ECHO" zone="0800" follow="" des="IST" type="NETWORK" >
+        <field name="0">0800</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">AT::DT</field> 
+        <field name="11">AT::TR</field> 
+        <field name="32">602907</field> 
+        <field name="70">301</field> 
+    </organization>
+    <organization name="NEWKEY" zone="0800" follow="" des="IST" type="NETWORK" >
+        <field name="0">0800</field> 
+        <field name="1">AT::BM</field> 
+        <field name="7">AT::DT</field> 
+        <field name="11">AT::TR</field> 
+        <field name="32">602907</field> 
+        <field name="48">AT::ZPK</field> 
+        <field name="70">101</field> 
+    </organization>
+
+    <organization name="REV-01" OR="2,3,13,32,41" type="REVERSAL">
+        <field name="0">0420</field> 
+        <field name="1">AT::BM</field> 
+        <field name="2">OR</field> 
+        <field name="3">OR</field> 
+        <field name="4">OR</field> 
+        <field name="7">AT::DT</field> 
+        <field name="11">OR</field> 
+        <field name="12">OR</field> 
+        <field name="13">OR</field> 
+        <field name="15">OR</field> 
+        <field name="18">OR</field> 
+        <field name="19">OR</field> 
+        <field name="22">021</field> 
+        <field name="25">00</field> 
+        <field name="32">602907</field> 
+        <field name="35">OR</field> 
+        <field name="37">OR</field> 
+        <field name="41">00000001</field> 
+        <field name="42">A              </field> 
+        <field name="43">                                 ICB 704</field> 
+        <field name="49">OR</field> 
+   </organization>    
+    
+</UNI_SIM>

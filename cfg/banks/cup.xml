@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<UNI_SIM type="BANK">
+        <organization name="INSTITUTION">
+                <field name="MODE">SINGLE4</field>
+		    <field name="DATAMODE">CUP</field>
+		    <field name="LINEMODE">ASCII</field>
+                <field name="INTERFACECODE">CUP</field>
+                <field name="ACC_TYPE">10 20 00</field>
+                <field name="TRANS_TYPE">01 30 03 20 00 02</field>
+                <field name="BIN">602907</field>
+                <field name="PAN">6201,6202</field>
+                <field name="IP1">203.184.80.31</field>
+                <field name="IP2">203.184.80.31</field>
+	        <field name="PORT1">31301</field>
+	        <field name="PORT2">31302</field>
+	        <field name="SPORT1">31301</field>
+		<field name="SPORT2">31302</field>
+		<field name="LOCALPORT1">0</field>
+		<field name="LOCALPORT2">0</field>
+		    <field name="ETX"/>
+      	    <field name="ISO_CFG">cup_iso_cfg.xml</field>
+      	    <field name="ZMK">A1E074F4481805FA60B8DE15B83A6956</field>
+		    <field name="ZPK">8CC14A8A4FAAFD77C6224621D85EC653</field>
+	</organization>
+</UNI_SIM>
