@@ -1,0 +1,17 @@
+<UNI_SIM type="ROUTING_TABLE">
+
+<organization name="PORT">
+	<field name="IST01">IST</field>
+	<field name="IST02">IST</field>
+	<field name="CUP1">IST</field>
+</organization>
+
+<organization name="PAN">
+	<field name="970405">IST</field>
+	<field name="970414">IST</field>
+	<field name="621094">CUP</field>
+</organization>
+
+
+
+</UNI_SIM>

@@ -1,0 +1,19 @@
+<UNI_SIM type="SYSTEM">
+
+<organization name="HSM">
+	<field name="IP">10.1.254.30</field>
+	<field name="Port">10098</field>
+	<field name="Connections">5</field>
+</organization>
+
+<organization name="BANK-PROFILE" path="banks">
+<field name="IST">acq-ist.xml</field>
+<field name="CUP">acq-cup.xml</field> 
+</organization>
+
+<organization name="global">
+	<field name="FIELD_PATTERN">2,3,4,11,12,13,41</field>
+</organization>
+
+
+</UNI_SIM>

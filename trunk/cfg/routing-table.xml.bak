@@ -1,0 +1,15 @@
+<UNI_SIM type="ROUTING_TABLE">
+
+<organization name="IST">
+	<field name="970405">16</field>
+	<field name="970411">16</field>
+</organization>
+
+<organization name="CUP" accountinfo="banks/card/cup-cards.xml">
+	<field name="621094">16</field>
+	<field name="621094">19</field>
+</organization>
+
+
+
+</UNI_SIM>
