@@ -11,6 +11,7 @@ import cfg.nodeType;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import lib.CommonLib;
 
@@ -141,9 +142,16 @@ public class messagePatternLoader {
     }
 
     public List<cfgNode> getCardData(String cardPan, String pinstCode) {
-        List<cfgNode> rs = new ArrayList<>();
+        List<cfgNode> rs = new LinkedList<>();
         for (int i = 0; i < size(); i++) {
+            switch (cfgFiles[i].getXmlType())
+            {
+                case SCENARIO:
+                    break;
+                    default:
+            }
             cfgNode header = cfgFiles[i].getXmlNode("header");
+            
             if (header != null) {
                 if (header.getValue("INSTITUTIONCODE").toUpperCase().equals(pinstCode.toUpperCase())) {
                     rs.add(cfgFiles[i].getXmlNode(cardPan));
