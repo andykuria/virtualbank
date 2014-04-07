@@ -15,6 +15,7 @@ import java.util.Queue;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lib.CommonLib;
+import lib.DateTimeEnum;
 import lib.DateUtils;
 import lib.msgSecurityEnum;
 import lib.secObjInfo;
@@ -30,12 +31,12 @@ public class IsoMessage extends iso8583message implements iiso8583, Cloneable {
     private HeaderProcessing msgHeader;
     private String sourceInstitutionCode = "";
     private String desInstitutionCode = "";
-    private IsoMessageType msgType=IsoMessageType.DEFAULT;
+    private IsoMessageType msgType = IsoMessageType.DEFAULT;
 
     private Queue<secObjInfo> secRequest = new ConcurrentLinkedQueue();
 
     private int portIndex = 0; //use for Duplex mode or some connections having more 1 socket
-    private int delaytime=0;
+    private int delaytime = 0;
 
     public void setSeqID(Integer pseqID) {
         this.seqID = pseqID;
@@ -132,7 +133,7 @@ public class IsoMessage extends iso8583message implements iiso8583, Cloneable {
         secRequest = value.getSecurityRequestQueue();
         setPortIndex(value.getPortIndex());
         seqID = value.getSeqID();
-        msgType=value.getMsgType();
+        msgType = value.getMsgType();
 
     }
 
@@ -144,7 +145,6 @@ public class IsoMessage extends iso8583message implements iiso8583, Cloneable {
         this.msgType = msgType;
     }
 
-    
     public IsoMessage(String[] fields) {
         super(fields);
         receiveDatetime = DateUtils.getDate();
@@ -403,24 +403,21 @@ public class IsoMessage extends iso8583message implements iiso8583, Cloneable {
         portIndex = pPortIndex;
     }
 
-    public msg8583Type getType()
-    {
-        switch (CommonLib.valueOf(getField(0)))
-        {
+    public msg8583Type getType() {
+        switch (CommonLib.valueOf(getField(0))) {
             case 200:
-                switch (CommonLib.valueOf(getField(3).substring(0, 2)))
-                {
+                switch (CommonLib.valueOf(getField(3).substring(0, 2))) {
                     case 1:
                         return msg8583Type.CW;
                     case 30:
-                        default:return msg8583Type.BAL;
+                    default:
+                        return msg8583Type.BAL;
                 }
-                
+
             case 420:
                 return msg8583Type.REVERSAL;
             case 800:
-                switch (CommonLib.valueOf(getField(70)))
-                {
+                switch (CommonLib.valueOf(getField(70))) {
                     default:
                     case 301:
                         return msg8583Type.ECHO;
@@ -431,9 +428,9 @@ public class IsoMessage extends iso8583message implements iiso8583, Cloneable {
                     case 101:
                         return msg8583Type.NEWKEY;
                 }
-              
+
         }
-        return msg8583Type.UNKNOWN;  
+        return msg8583Type.UNKNOWN;
     }
 
     public int getDelaytime() {
@@ -443,16 +440,13 @@ public class IsoMessage extends iso8583message implements iiso8583, Cloneable {
     public void setDelaytime(int delaytime) {
         this.delaytime = delaytime;
     }
-    
-    public String getHashString()
-    {
-        return getField(2)+getField(3)+getField(4)+getField(5)+getField(11)+getField(13)+getField(41);
+
+    public String getHashString() {
+        return getField(2) + getField(3) + getField(4) + getField(5) + getField(11) + getField(13) + getField(41);
     }
-    
-    public int getHashCode()
-    {
+
+    public int getHashCode() {
         return getHashString().hashCode();
     }
-    
-    
+
 }

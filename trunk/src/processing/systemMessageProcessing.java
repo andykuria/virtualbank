@@ -50,40 +50,42 @@ public class systemMessageProcessing extends Thread {
             try {
                 IsoMessage imsg = institutionQueue.peekMessage();
                 if (imsg != null) {
-                    if (DateUtils.DateDiff(DateTimeEnum.SECOND, imsg.getReceiveDatetime(), DateUtils.getDate()) >= systemGlobalInfo.getSystemConfig().getIntValue("GLOBAL", "QOS")) {
+                    if (DateUtils.DateDiff(DateTimeEnum.MILISECOND, imsg.getReceiveDatetime(), DateUtils.getDate()) >= systemGlobalInfo.getSystemConfig().getIntValue("GLOBAL", "QOS") * 1000 + imsg.getDelaytime()) {
                         CommonLib.PrintScreen(systemGlobalInfo, "ERR SMP Drop message - time out: " + imsg.getTraceInfo(), showLogEnum.DETAILMODE);
 
                     } else {
 
-                        switch (imsg.getMsgType()) {
-                            case REQUEST:
-                                routingtable rt = new routingtable(systemGlobalInfo.getcfgRouting());
-                                switch (systemGlobalInfo.getRoutingType(imsg.getSourceInterfaceCode())) {
-                                    case PAN:
-                                        imsg.setDesInterfaceCode(rt.getRoutingByPan(imsg.getField(2)));
-                                        break;
-                                    case PORT:
-                                        imsg.setDesInterfaceCode(rt.getRoutingByPort(imsg.getSourceInterfaceCode()));
-                                        break;
-                                }
+                        if (DateUtils.DateDiff(DateTimeEnum.MILISECOND, imsg.getReceiveDatetime(), DateUtils.getDate()) >= imsg.getDelaytime()) {
+                            switch (imsg.getMsgType()) {
+                                case REQUEST:
+                                    routingtable rt = new routingtable(systemGlobalInfo.getcfgRouting());
+                                    switch (systemGlobalInfo.getRoutingType(imsg.getSourceInterfaceCode())) {
+                                        case PAN:
+                                            imsg.setDesInterfaceCode(rt.getRoutingByPan(imsg.getField(2)));
+                                            break;
+                                        case PORT:
+                                            imsg.setDesInterfaceCode(rt.getRoutingByPort(imsg.getSourceInterfaceCode()));
+                                            break;
+                                    }
 
-                                imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()).getSecurityList(imsg));
+                                    imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()).getSecurityList(imsg));
 
+                                    break;
+                                case RESPONSE:
 
-                                break;
-                            case RESPONSE:
+                                    break;
+                                case NETWORK_REQUEST:
+                                    imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getSourceInterfaceCode()).getSecurityList(imsg));
+                                    break;
+                                case NETWORK_RESPONSE:
+                                    break;
+                                default:
 
-                                break;
-                            case NETWORK_REQUEST:
-                                imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getSourceInterfaceCode()).getSecurityList(imsg));
-                                break;
-                            case NETWORK_RESPONSE:
-                                break;
-                            default:
-
+                            }
+                            msgFlowControlQueue.enqueueMessage(imsg);
+                        } else {
+                            institutionQueue.equals(imsg);
                         }
-                        msgFlowControlQueue.enqueueMessage(imsg);
-
                     }
 
                 }

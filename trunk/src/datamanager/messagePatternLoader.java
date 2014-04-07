@@ -144,19 +144,21 @@ public class messagePatternLoader {
     public List<cfgNode> getCardData(String cardPan, String pinstCode) {
         List<cfgNode> rs = new LinkedList<>();
         for (int i = 0; i < size(); i++) {
-            switch (cfgFiles[i].getXmlType())
-            {
+            switch (cfgFiles[i].getXmlType()) {
+                case PATTRENDATA:
+                    cfgNode header = cfgFiles[i].getXmlNode("header");
+
+                    if (header != null) {
+                        if (header.getValue("INSTITUTIONCODE").toUpperCase().equals(pinstCode.toUpperCase())) {
+                            rs.add(cfgFiles[i].getXmlNode(cardPan));
+                        }
+                    }
+                    break;
                 case SCENARIO:
                     break;
-                    default:
+                default:
             }
-            cfgNode header = cfgFiles[i].getXmlNode("header");
-            
-            if (header != null) {
-                if (header.getValue("INSTITUTIONCODE").toUpperCase().equals(pinstCode.toUpperCase())) {
-                    rs.add(cfgFiles[i].getXmlNode(cardPan));
-                }
-            }
+
         }
         return rs;
     }

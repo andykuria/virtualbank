@@ -95,6 +95,7 @@ public class scenarioMaker {
             if (sP.getTypeOfScript() == scriptEnum.REVERSAL) {
                 originalTranx = listOfMsg.get(CommonLib.valueOf(sP.getValue("OR")) - 1);
             }
+            
             for (String iField : ptn.keySet()) {
                 
                 switch (ptn.get(iField).getType()) {
