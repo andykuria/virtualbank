@@ -180,4 +180,15 @@ public class messagePatternLoader {
         }
         return rs;
     }
+
+    public cfgParser getFileParserByName(String fileName) {
+        for (int i = 0; i < size(); i++) {
+            cfgParser testFile = cfgFiles[i];
+            if (testFile.getFileName().toUpperCase().equals(fileName.toUpperCase())) {
+                return testFile;
+
+            }
+        }
+        return null;
+    }
 }

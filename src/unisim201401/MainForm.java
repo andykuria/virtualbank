@@ -10,11 +10,13 @@ import cfg.cfgParser;
 import cfg.nodeType;
 import datamanager.fieldParser;
 import datamanager.fieldType;
+import datamanager.scenarioMaker;
 import globalutils.LineModeEnum;
 import iso8583.IsoMessage;
 import iso8583.IsoMessagePipeline;
 import iss.issEnum;
 import iss.issSettings;
+import iss.showLogEnum;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -610,108 +612,126 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btSendPatternActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSendPatternActionPerformed
         // TODO add your handling code here:
-        IsoMessage buildMessage = new IsoMessage();
-        buildMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
-        buildMessage.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
-
-        buildMessage.setSourceInterfaceCode("SIMUI");
-        if (cmbType.getSelectedItem() != null) {
-
-            String instCmb = cmbType.getSelectedItem().toString();
-            String msgCode = instCmb.substring(0, instCmb.indexOf("("));
-            String xmlFile = instCmb.substring(instCmb.indexOf("(") + 1, instCmb.length() - 1);
-            cfgNode tmpNode = systemData.getPatternObj().getTempNode(xmlFile, msgCode);
-            Map<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
-            buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
-            System.out.println(controlFieldPatterns.keySet());
-            for (Entry<String, fieldParser> entry : controlFieldPatterns.entrySet()) {
-                String key = entry.getKey();
-                fieldParser value = entry.getValue();
-
-                switch (value.getType()) {
-                    case MANUAL:
-                        JTextField txtManual = mappingMNField.get(key);
-                        buildMessage.setField(CommonLib.valueOf(key), txtManual.getText());
-
-                        break;
-                    case MANUAL_HSM:
-                        secObjInfo pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_GEN_PIN);
-                        if (key.equals("52")) {
-                            pinCmdReq.setFields(new String[]{"52"});
-
-                        } else {
-                            pinCmdReq.setFields(new String[]{"48"});
-                        }
-                        pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
-                        pinCmdReq.setMsgID(buildMessage.getSeqID());
-                        pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
-                        pinCmdReq.setdZone(buildMessage.getDesInterfaceCode());
-                        txtManual = mappingMNField.get(key);
-                        buildMessage.setField(CommonLib.valueOf(key), txtManual.getText());
-                        buildMessage.addSecRequest(pinCmdReq);
-                        break;
-                    case AUTO_DATE:
-                        buildMessage.setField(CommonLib.valueOf(key), DateUtils.getCurrentDateIST());
-                        break;
-                    case AUTO_DATETIME:
-                        buildMessage.setField(CommonLib.valueOf(key), DateUtils.getCurrentDateTime());
-                        break;
-                    case AUTO_PAN:
-                        String track2 = cmbCards.getSelectedItem().toString();
-                        buildMessage.setField(CommonLib.valueOf(key), track2.substring(0, track2.indexOf("=")));
-                        break;
-                    case AUTO_TRACK2:
-                        track2 = cmbCards.getSelectedItem().toString();
-                        buildMessage.setField(CommonLib.valueOf(key), track2);
-                        break;
-                    case AUTO_TIME:
-                        buildMessage.setField(CommonLib.valueOf(key), DateUtils.getTime());
-                        break;
-                    case AUTO_SEQ37:
-                        buildMessage.setField(CommonLib.valueOf(key), CommonLib.getRefNo());
-                        break;
-                    case AUTO_TRACE:
-                        buildMessage.setField(CommonLib.valueOf(key), CommonLib.getSystemTrace());
-                        break;
-                    case AUTO_AMMOUNT:
-                        String[] amms = value.getFieldValue().split("-");
-                        int minAmm = CommonLib.valueOf(amms[0]);
-                        int maxAmm = CommonLib.valueOf(amms[1]);
-                        buildMessage.setField(CommonLib.valueOf(key), CommonLib.getAmmount(minAmm, maxAmm, 12));
-                    case AUTO_BITMAP:
-                        break;
-                    case AUTO_ZPK:
-                        pinCmdReq = new secObjInfo(msgSecurityEnum.NET_ZPK_GENERATE_ZMK);
-
-                        pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
-                        pinCmdReq.setMsgID(buildMessage.getSeqID());
-                        pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
-                        pinCmdReq.setdZone(buildMessage.getDesInterfaceCode());
-                        buildMessage.addSecRequest(pinCmdReq);
-                        break;
-                    case AUTO_MAC_GEN:
-                        pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_OF_MACGEN);
-                        if (key.equals("64")) {
-                            pinCmdReq.setFields(new String[]{"64"});
-
-                        } else {
-                            pinCmdReq.setFields(new String[]{"128"});
-                        }
-                        pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
-                        pinCmdReq.setMsgID(buildMessage.getSeqID());
-                        pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
-                        pinCmdReq.setdZone(buildMessage.getDesInterfaceCode());
-                        buildMessage.addSecRequest(pinCmdReq);
-                        break;
-                    default:
-                        buildMessage.setField(CommonLib.valueOf(key), value.getFieldValue());
+        switch (nodeType.valueOf(cmbTransType.getSelectedItem().toString())) {
+            case SCENARIO:
+                String instCmb = cmbType.getSelectedItem().toString();
+                String msgCode = instCmb.substring(0, instCmb.indexOf("("));
+                String xmlFile = instCmb.substring(instCmb.indexOf("(") + 1, instCmb.length() - 1);
+                cfgParser scenarioFile = systemData.getPatternObj().getFileParserByName(xmlFile);
+                scenarioMaker makeMessage = new scenarioMaker(scenarioFile);
+                makeMessage.setDesInstitution(cmbACQ.getSelectedItem().toString());
+                makeMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
+                makeMessage.buildMessages();
+                List<IsoMessage> msgRs= makeMessage.getListOfMsg();
+                for(IsoMessage imsg:msgRs){
+                    CommonLib.PrintScreen(systemData, imsg.printedMessage(), showLogEnum.DEFAULT);
                 }
-            }
-            buildMessage.setMessageState(true);
-            systemData.getIcmQueue().systemmessagequeue(buildMessage);
-            txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
+                break;
+            default:
+                IsoMessage buildMessage = new IsoMessage();
+                buildMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
+                buildMessage.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
 
+                buildMessage.setSourceInterfaceCode("SIMUI");
+                if (cmbType.getSelectedItem() != null) {
+
+                    instCmb = cmbType.getSelectedItem().toString();
+                    msgCode = instCmb.substring(0, instCmb.indexOf("("));
+                    xmlFile = instCmb.substring(instCmb.indexOf("(") + 1, instCmb.length() - 1);
+                    cfgNode tmpNode = systemData.getPatternObj().getTempNode(xmlFile, msgCode);
+                    Map<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
+                    buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
+                    System.out.println(controlFieldPatterns.keySet());
+                    for (Entry<String, fieldParser> entry : controlFieldPatterns.entrySet()) {
+                        String key = entry.getKey();
+                        fieldParser value = entry.getValue();
+
+                        switch (value.getType()) {
+                            case MANUAL:
+                                JTextField txtManual = mappingMNField.get(key);
+                                buildMessage.setField(CommonLib.valueOf(key), txtManual.getText());
+
+                                break;
+                            case MANUAL_HSM:
+                                secObjInfo pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_GEN_PIN);
+                                if (key.equals("52")) {
+                                    pinCmdReq.setFields(new String[]{"52"});
+
+                                } else {
+                                    pinCmdReq.setFields(new String[]{"48"});
+                                }
+                                pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
+                                pinCmdReq.setMsgID(buildMessage.getSeqID());
+                                pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
+                                pinCmdReq.setdZone(buildMessage.getDesInterfaceCode());
+                                txtManual = mappingMNField.get(key);
+                                buildMessage.setField(CommonLib.valueOf(key), txtManual.getText());
+                                buildMessage.addSecRequest(pinCmdReq);
+                                break;
+                            case AUTO_DATE:
+                                buildMessage.setField(CommonLib.valueOf(key), DateUtils.getCurrentDateIST());
+                                break;
+                            case AUTO_DATETIME:
+                                buildMessage.setField(CommonLib.valueOf(key), DateUtils.getCurrentDateTime());
+                                break;
+                            case AUTO_PAN:
+                                String track2 = cmbCards.getSelectedItem().toString();
+                                buildMessage.setField(CommonLib.valueOf(key), track2.substring(0, track2.indexOf("=")));
+                                break;
+                            case AUTO_TRACK2:
+                                track2 = cmbCards.getSelectedItem().toString();
+                                buildMessage.setField(CommonLib.valueOf(key), track2);
+                                break;
+                            case AUTO_TIME:
+                                buildMessage.setField(CommonLib.valueOf(key), DateUtils.getTime());
+                                break;
+                            case AUTO_SEQ37:
+                                buildMessage.setField(CommonLib.valueOf(key), CommonLib.getRefNo());
+                                break;
+                            case AUTO_TRACE:
+                                buildMessage.setField(CommonLib.valueOf(key), CommonLib.getSystemTrace());
+                                break;
+                            case AUTO_AMMOUNT:
+                                String[] amms = value.getFieldValue().split("-");
+                                int minAmm = CommonLib.valueOf(amms[0]);
+                                int maxAmm = CommonLib.valueOf(amms[1]);
+                                buildMessage.setField(CommonLib.valueOf(key), CommonLib.getAmmount(minAmm, maxAmm, 12));
+                            case AUTO_BITMAP:
+                                break;
+                            case AUTO_ZPK:
+                                pinCmdReq = new secObjInfo(msgSecurityEnum.NET_ZPK_GENERATE_ZMK);
+
+                                pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
+                                pinCmdReq.setMsgID(buildMessage.getSeqID());
+                                pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
+                                pinCmdReq.setdZone(buildMessage.getDesInterfaceCode());
+                                buildMessage.addSecRequest(pinCmdReq);
+                                break;
+                            case AUTO_MAC_GEN:
+                                pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_OF_MACGEN);
+                                if (key.equals("64")) {
+                                    pinCmdReq.setFields(new String[]{"64"});
+
+                                } else {
+                                    pinCmdReq.setFields(new String[]{"128"});
+                                }
+                                pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
+                                pinCmdReq.setMsgID(buildMessage.getSeqID());
+                                pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
+                                pinCmdReq.setdZone(buildMessage.getDesInterfaceCode());
+                                buildMessage.addSecRequest(pinCmdReq);
+                                break;
+                            default:
+                                buildMessage.setField(CommonLib.valueOf(key), value.getFieldValue());
+                        }
+                    }
+                    buildMessage.setMessageState(true);
+                    systemData.getIcmQueue().systemmessagequeue(buildMessage);
+                    txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
+
+                }
         }
+
     }//GEN-LAST:event_btSendPatternActionPerformed
 
     private void btSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSetActionPerformed
