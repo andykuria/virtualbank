@@ -117,7 +117,7 @@ public class bnvClient extends Thread implements ithreadMonitor, ithreadSequence
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException ex) {
-                            CommonLib.PrintScreen(systemGlobal, String.format("ERR SOCK - %s (%s): couldn't do waiting Connection", identifyState, port), showLogEnum.DETAILMODE);
+                            CommonLib.PrintScreen(systemGlobal, String.format("ERR SOCK - %s (%s): couldn't do waiting Connection", identifyState, port), showLogEnum.DEFAULT);
 
                         }
                     } else {
@@ -129,7 +129,7 @@ public class bnvClient extends Thread implements ithreadMonitor, ithreadSequence
             }
         }
         initSocket();
-        CommonLib.PrintScreen(systemGlobal, String.format("SOCK - %s: (%s): connection is started", identifyState, port), showLogEnum.DETAILMODE);
+        CommonLib.PrintScreen(systemGlobal, String.format("SOCK - %s: (%s): connection is started", identifyState, port), showLogEnum.DEFAULT);
 
         try {
             while (isRunning) {

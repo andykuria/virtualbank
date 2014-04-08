@@ -24,8 +24,8 @@ import lib.CommonLib;
 public class cfgNode {
 
     cfgType inCFGFileType = cfgType.SYSTEM;
-    Map<String, String> nodeAtts;
-    Map<String, String> nodeValues;
+    LinkedHashMap<String, String> nodeAtts;
+    LinkedHashMap<String, String> nodeValues;
     String nodeID;
     String fullPathXML;
     nodeType nt = nodeType.NOT_DEFINE;
@@ -55,16 +55,16 @@ public class cfgNode {
         return nodeAtts;
     }
 
-    public void setNodeAtts(HashMap<String, String> nodeAtts) {
+    public void setNodeAtts(LinkedHashMap<String, String> nodeAtts) {
         this.nodeAtts = nodeAtts;
     }
 
-    public Map<String, String> getNodeValues() {
+    public LinkedHashMap<String, String> getNodeValues() {
         return nodeValues;
     }
 
-    public HashMap<String, String> getNodeValues(String filterPattern) {
-        HashMap<String, String> nodeFilter = new HashMap<>();
+    public LinkedHashMap<String, String> getNodeValues(String filterPattern) {
+        LinkedHashMap<String, String> nodeFilter = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : nodeValues.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -80,8 +80,8 @@ public class cfgNode {
         return nodeFilter;
     }
 
-    public Map<String, fieldParser> getFieldPatternFromNode() {
-        Map<String, fieldParser> nodePattern = new LinkedHashMap<>();
+    public LinkedHashMap<String, fieldParser> getFieldPatternFromNode() {
+        LinkedHashMap<String, fieldParser> nodePattern = new LinkedHashMap<>();
         for (Map.Entry<String, String> entry : nodeValues.entrySet()) {
             String key = entry.getKey();
             String value = entry.getValue();
@@ -109,7 +109,7 @@ public class cfgNode {
         return nodePattern;
     }
 
-    public void setNodeValues(HashMap<String, String> nodeValues) {
+    public void setNodeValues(LinkedHashMap<String, String> nodeValues) {
         this.nodeValues = nodeValues;
     }
 
