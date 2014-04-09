@@ -71,7 +71,7 @@ public class systemMessageFlowControlProcess extends Thread {
                                 outgoingQueue.systemmessagequeue(msg);
 
                             } else {
-                                CommonLib.PrintScreen(systemGlobalInfo, String.format("SMFCP - %s: %s", String.valueOf(newSecReq), msg.getTraceInfo()), showLogEnum.DEFAULT);
+                                CommonLib.PrintScreen(systemGlobalInfo, String.format("SMFCP - %s: %s", String.valueOf(newSecReq.getTypeOfSec()), msg.getTraceInfo()), showLogEnum.DEFAULT);
 
                                 switch (newSecReq.getTypeOfSec()) {
 

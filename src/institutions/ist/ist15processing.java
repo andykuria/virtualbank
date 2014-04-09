@@ -193,7 +193,9 @@ public class ist15processing implements iIssProcessing {
 
     private IsoMessage processBI(IsoMessage requestMsg, cfgNode responseFmt, carddataLoader cd) {
         IsoMessage rs = new IsoMessage();
-        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(requestMsg.getSourceInterfaceCode()));
+        rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
+        rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
+        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getSourceInterfaceCode()));
         cfgNode issAccount = cd.getCardInf(requestMsg.getField(2));
         Integer balanceAmmount = issAccount.getIntValue("AvaiBalance");
         String accBalance = issAccount.getValue("Balance");
@@ -276,7 +278,9 @@ public class ist15processing implements iIssProcessing {
 
     private IsoMessage processCW(IsoMessage requestMsg, cfgNode responseFmt, carddataLoader cd) {
         IsoMessage rs = new IsoMessage();
-        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(requestMsg.getSourceInterfaceCode()));
+        rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
+        rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
+        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getSourceInterfaceCode()));
         cfgNode issAccount = cd.getCardInf(requestMsg.getField(2));
         Integer balanceAmmount = issAccount.getIntValue("AvaiBalance");
         String accBalance = issAccount.getValue("Balance");

@@ -44,7 +44,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-
+        
     }
 
     /**
@@ -578,7 +578,7 @@ public class MainForm extends javax.swing.JFrame {
         reloadTransactionAndCards();
 
     }//GEN-LAST:event_cmbACQActionPerformed
-
+    
     private void reloadTransactionAndCards() {
         DefaultComboBoxModel theModel;
         theModel = (DefaultComboBoxModel) cmbType.getModel();
@@ -586,12 +586,12 @@ public class MainForm extends javax.swing.JFrame {
         theModel = (DefaultComboBoxModel) cmbCards.getModel();
         theModel.removeAllElements();
         if (cmbACQ.getSelectedItem() != null) {
-
+            
             List<String> allType = systemData.getPatternObj().getAllTransactionType(nodeType.valueOf(cmbTransType.getSelectedItem().toString()), cmbACQ.getSelectedItem().toString());
             String[] TypeArray = new String[allType.size()];
             allType.toArray(TypeArray);
             cmbType.setModel(new DefaultComboBoxModel(TypeArray));
-
+            
             List<String> cardList = systemData.getPatternObj().getAllCards((cmbACQ.getSelectedItem() != null) ? cmbACQ.getSelectedItem().toString() : "");
             String[] cardsArray = new String[cardList.size()];
             cardList.toArray(cardsArray);
@@ -631,33 +631,33 @@ public class MainForm extends javax.swing.JFrame {
                 IsoMessage buildMessage = new IsoMessage();
                 buildMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
                 buildMessage.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
-
+                
                 buildMessage.setSourceInterfaceCode("SIMUI");
                 if (cmbType.getSelectedItem() != null) {
-
+                    
                     instCmb = cmbType.getSelectedItem().toString();
                     msgCode = instCmb.substring(0, instCmb.indexOf("("));
                     xmlFile = instCmb.substring(instCmb.indexOf("(") + 1, instCmb.length() - 1);
                     cfgNode tmpNode = systemData.getPatternObj().getTempNode(xmlFile, msgCode);
-
+                    
                     Map<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
                     buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
                     System.out.println(controlFieldPatterns.keySet());
                     for (Entry<String, fieldParser> entry : controlFieldPatterns.entrySet()) {
                         String key = entry.getKey();
                         fieldParser value = entry.getValue();
-
+                        
                         switch (value.getType()) {
                             case MANUAL:
                                 JTextField txtManual = mappingMNField.get(key);
                                 buildMessage.setField(CommonLib.valueOf(key), txtManual.getText());
-
+                                
                                 break;
                             case MANUAL_HSM:
                                 secObjInfo pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_GEN_PIN);
                                 if (key.equals("52")) {
                                     pinCmdReq.setFields(new String[]{"52"});
-
+                                    
                                 } else {
                                     pinCmdReq.setFields(new String[]{"48"});
                                 }
@@ -702,7 +702,7 @@ public class MainForm extends javax.swing.JFrame {
                                 break;
                             case AUTO_ZPK:
                                 pinCmdReq = new secObjInfo(msgSecurityEnum.NET_ZPK_GENERATE_ZMK);
-
+                                
                                 pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
                                 pinCmdReq.setMsgID(buildMessage.getSeqID());
                                 pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
@@ -713,7 +713,7 @@ public class MainForm extends javax.swing.JFrame {
                                 pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_OF_MACGEN);
                                 if (key.equals("64")) {
                                     pinCmdReq.setFields(new String[]{"64"});
-
+                                    
                                 } else {
                                     pinCmdReq.setFields(new String[]{"128"});
                                 }
@@ -728,19 +728,21 @@ public class MainForm extends javax.swing.JFrame {
                         }
                     }
                     buildMessage.setMessageState(true);
+                    buildMessage.setMsgType(CommonLib.getMsgType(buildMessage.getField(0)));
                     systemData.getIcmQueue().systemmessagequeue(buildMessage);
                     txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
+                    cfgNode revFmt = systemData.getPatternObj().getTempNode(xmlFile, tmpNode.getNodeAtt("rev"));
+                    IsoMessage revMsg = systemData.getIssResponse(cmbACQ.getSelectedItem().toString()).makeRevFromFin(buildMessage, revFmt);
+                    revMsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
+                    revMsg.setMsgType(CommonLib.getMsgType(revMsg.getField(0)));
                     if (chkReversal.isSelected()) {
-                        cfgNode revFmt = systemData.getPatternObj().getTempNode(xmlFile, tmpNode.getNodeAtt("rev"));
-                        IsoMessage revMsg = systemData.getIssResponse(cmbACQ.getSelectedItem().toString()).makeRevFromFin(buildMessage, revFmt);
-                        revMsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
+                        
                         revMsg.setDelaytime(CommonLib.valueOf(txtReversal.getText()));
                         systemData.getIcmQueue().systemmessagequeue(revMsg);
                         txtOutput.setText(txtOutput.getText() + "\n\r" + new String(revMsg.toByte()));
                         
-
                     } else {
-
+                        systemData.getReversalMap().add(revMsg.getSeqID(), revMsg);
                     }
                 }
         }
@@ -771,13 +773,13 @@ public class MainForm extends javax.swing.JFrame {
             issResponseCfg.getAuth().setValueForFix(txtAuthCode.getText());
         }
         if (chkDelay.isSelected()) {
-
+            
         } else {
             issResponseCfg.setDelayResponse(false);
             issResponseCfg.setDelayTime(0);
         }
         issResponseCfg.setRequireMac(chkMAC.isSelected());
-
+        
         systemData.setIssCfg(issResponseCfg);
     }//GEN-LAST:event_btSetActionPerformed
 
@@ -829,7 +831,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-
+    
     public void setSystemData(systemLoader systemData) {
         this.systemData = systemData;
         this.systemData.setTaLogs(txtOutput);
@@ -838,12 +840,12 @@ public class MainForm extends javax.swing.JFrame {
         List<String> allInsts = instNode.getFieldKeys();
         String[] InsArray = new String[allInsts.size()];
         allInsts.toArray(InsArray);
-
+        
         DefaultComboBoxModel theModel = (DefaultComboBoxModel) cmbACQ.getModel();
         theModel.removeAllElements();
-
+        
         cmbACQ.setModel(new DefaultComboBoxModel(InsArray));
-
+        
         txtOutput.setLineWrap(true);
         /*theModel = (DefaultComboBoxModel) cmbCards.getModel();
          theModel.removeAllElements();
@@ -855,7 +857,7 @@ public class MainForm extends javax.swing.JFrame {
         //getContentPane().add(cmbACQ, BorderLayout.SOUTH);
         //http://www.coderanch.com/t/529195/GUI/java/set-ID-JCombobox
     }
-
+    
     private void buildCustomControl(cfgNode nodeNeedToBuild) {
         if (mappingMNField != null) {
             mappingMNField.clear();
@@ -864,18 +866,18 @@ public class MainForm extends javax.swing.JFrame {
             int iControl = 0;
             for (iControl = 0; iControl < lblFields.length; iControl++) {
                 lblFields[iControl].setVisible(false);
-
+                
                 lblFields[iControl] = null;
-
+                
                 txtFields[iControl].setVisible(false);
-
+                
                 txtFields[iControl] = null;
-
+                
             }
             lblFields = null;
             txtFields = null;
         }
-
+        
         pnFields1.removeAll();
         pnFields2.removeAll();
         Vector<fieldType> filterFields = new Vector<>();

@@ -146,6 +146,7 @@ public class messagePatternLoader {
         for (int i = 0; i < size(); i++) {
             switch (cfgFiles[i].getXmlType()) {
                 case PATTRENDATA:
+                case CARD:
                     cfgNode header = cfgFiles[i].getXmlNode("header");
 
                     if (header != null) {
@@ -156,6 +157,7 @@ public class messagePatternLoader {
                     break;
                 case SCENARIO:
                     break;
+                
                 default:
             }
 
