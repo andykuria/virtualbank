@@ -58,31 +58,49 @@ public class systemMessageProcessing extends Thread {
                         if (DateUtils.DateDiff(DateTimeEnum.MILISECOND, imsg.getReceiveDatetime(), DateUtils.getDate()) >= imsg.getDelaytime()) {
                             switch (imsg.getMsgType()) {
                                 case REQUEST:
-                                    routingtable rt = new routingtable(systemGlobalInfo.getcfgRouting());
-                                    switch (systemGlobalInfo.getRoutingType(imsg.getSourceInterfaceCode())) {
-                                        case PAN:
-                                            imsg.setDesInterfaceCode(rt.getRoutingByPan(imsg.getField(2)));
-                                            break;
-                                        case PORT:
-                                            imsg.setDesInterfaceCode(rt.getRoutingByPort(imsg.getSourceInterfaceCode()));
-                                            break;
+                                    if (imsg.getSourceInterfaceCode().equals("SIMUI")) {
+
+                                    } else {
+                                        routingtable rt = new routingtable(systemGlobalInfo.getcfgRouting());
+                                        switch (systemGlobalInfo.getRoutingType(imsg.getSourceInterfaceCode())) {
+                                            case PAN:
+                                                imsg.setDesInterfaceCode(rt.getRoutingByPan(imsg.getField(2)));
+                                                break;
+                                            case PORT:
+                                                imsg.setDesInterfaceCode(rt.getRoutingByPort(imsg.getSourceInterfaceCode()));
+                                                break;
+                                        }
                                     }
-
                                     imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()).getSecurityList(imsg));
-
+                                    msgFlowControlQueue.enqueueMessage(imsg);
                                     break;
                                 case RESPONSE:
+                                    IsoMessage origTranx = systemGlobalInfo.getOriginalMap().get(imsg.getHashCode());
+                                    if (origTranx != null) {
+                                        systemGlobalInfo.getOriginalMap().remove(imsg.getHashCode());
+                                        if (origTranx.getSourceInterfaceCode().toUpperCase().equals("SIMUI")) {
+                                            CommonLib.PrintScreen(systemGlobalInfo, "Rev response: " + imsg.printedMessage(), showLogEnum.DEFAULT);
+                                        } else {
+                                            imsg.setDesInterfaceCode(origTranx.getSourceInterfaceCode());
+                                            imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()).getSecurityList(imsg));
+                                            msgFlowControlQueue.enqueueMessage(imsg);
+                                        }
+                                    } else {
+                                        CommonLib.PrintScreen(systemGlobalInfo, "Rev response (DROP - NOT HAVE ORIG TRANX): " + imsg.printedMessage(), showLogEnum.DEFAULT);
+                                    }
 
                                     break;
                                 case NETWORK_REQUEST:
                                     imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getSourceInterfaceCode()).getSecurityList(imsg));
+                                    msgFlowControlQueue.enqueueMessage(imsg);
                                     break;
                                 case NETWORK_RESPONSE:
                                     break;
                                 default:
+                                    msgFlowControlQueue.enqueueMessage(imsg);
 
                             }
-                            msgFlowControlQueue.enqueueMessage(imsg);
+
                         } else {
                             institutionQueue.equals(imsg);
                         }

@@ -138,6 +138,9 @@ public class DateUtils {
             case SECOND:
                 diffvalue = Math.abs(date1.getTime() - date2.getTime()) / 1000;
                 break;
+            case MILISECOND:
+                diffvalue = Math.abs(date1.getTime() - date2.getTime()) ;
+                break;
             default:
                 break;
         }
