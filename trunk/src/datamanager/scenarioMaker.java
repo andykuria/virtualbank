@@ -149,7 +149,8 @@ public class scenarioMaker {
                         String[] amms = ptn.get(iField).getFieldValue().split("-");
                         int minAmm = CommonLib.valueOf(amms[0]);
                         int maxAmm = CommonLib.valueOf(amms[1]);
-                        rs.setField(CommonLib.valueOf(iField), CommonLib.getAmmount(minAmm, maxAmm, 12));
+                        int digit = CommonLib.valueOf(amms[2]);
+                        rs.setField(CommonLib.valueOf(iField), CommonLib.getAmmount(minAmm, maxAmm, digit, 12));
 
                         break;
                     case AUTO_MAC_GEN:
@@ -172,6 +173,7 @@ public class scenarioMaker {
             }
 
         }
+        rs.setMessageState(true);
         return rs;
 
     }

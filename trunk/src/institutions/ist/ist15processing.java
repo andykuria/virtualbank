@@ -147,6 +147,8 @@ public class ist15processing implements iIssProcessing {
                 case UNKNOWN:
                     break;
 
+                
+
             }
         } catch (Exception ex) {
         }
@@ -176,6 +178,7 @@ public class ist15processing implements iIssProcessing {
                     case AUTO_ORIGINAL:
                         rs.setField(CommonLib.valueOf(iFieldFMT), requestMsg.getField(CommonLib.valueOf(iFieldFMT)));
                         break;
+                    
                     case AUTO_BITMAP:
                         break;
                     default:
@@ -371,15 +374,18 @@ public class ist15processing implements iIssProcessing {
     }
 
     @Override
-    public IsoMessage makeRevFromFin(IsoMessage requestMsg) {
+    public IsoMessage makeRevFromFin(IsoMessage requestMsg, cfgNode revFmt) {
 
         IsoMessage rs = new IsoMessage();
         rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(requestMsg.getDesInterfaceCode()));
-        List<cfgNode> alLFmt = systemGlobalInfo.getPatternObj().getNodeByType(nodeType.REVERSAL);
-        cfgNode revFmt = null;
-        if (alLFmt.size() > 0) {
-            revFmt = alLFmt.get(0);
-        }
+        rs.setSourceInterfaceCode(requestMsg.getSourceInterfaceCode());
+        rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
+        
+        //List<cfgNode> alLFmt = systemGlobalInfo.getPatternObj().getNodeByType(nodeType.REVERSAL);
+        //cfgNode revFmt = null;
+        //if (alLFmt.size() > 0) {
+        //    revFmt = alLFmt.get(0);
+        //}
         
         if (revFmt != null) {
             List<String> fieldInFmt = revFmt.getFieldKeys();
