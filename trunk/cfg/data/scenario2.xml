@@ -4,7 +4,7 @@
         <field name="type">TMP</field> 
         <field name="SCOPE">IST</field> 
         <field name="ACQ_CARDS">CL01</field> 
-        <field name="CL"></field> 
+        <field name="CL">9704050667570076=49121213715950580000001,9704140003000425878=49121213715950580000001</field> 
         <field name="SC">SCRIPT</field> 
     </organization>
     <organization name="CW-VND">
@@ -29,7 +29,7 @@
         <field name="42">A              </field> 
         <field name="43">                                 ICB 704</field> 
         <field name="49">704</field> 
-        <field name="52">AT::HSM::111111</field> 
+        <field name="52">FFBBAA001122</field> 
     </organization>
     <organization name="PUR-VND">
         <field name="0">0200</field> 
@@ -53,7 +53,7 @@
         <field name="42">A              </field> 
         <field name="43">                                 ICB 704</field> 
         <field name="49">704</field> 
-        <field name="52">AT::HSM::111111</field> 
+        <field name="52">FFBBAA001122</field> 
     </organization>
     <organization name="REV">
         <field name="0">0420</field> 
@@ -81,15 +81,9 @@
     <organization name="SCRIPT" loop="2" type="SCENARIO">
         <field name="1">F=CW-VND::DL=1000::PAN=1</field> 
         <field name="2">F=CW-VND::DL=1000::PAN=1</field> 
-        <field name="3">F=CW-VND::DL=1000::PAN=1</field> 
-        <field name="4">F=CW-VND::DL=1000::PAN=1</field> 
-        <field name="5">F=CW-VND::DL=1000::PAN=1</field> 
-        <field name="6">R=REV::DL=1000::OR=2</field> 
-        <field name="7">F=CW-VND::DL=1000::PAN=2</field> 
-        <field name="8">F=CW-VND::DL=1000::PAN=2</field> 
-        <field name="9">F=CW-VND::DL=1000::PAN=2</field> 
-        <field name="10">F=PUR-VND::DL=1000::PAN=3</field> 
-        <field name="11">F=PUR-VND::DL=1000::PAN=3</field> 
-        <field name="12">R=REV::DL=1000::OR=11</field> 
+        <field name="3">R=REV::DL=1000::OR=2</field> 
+        <field name="4">F=CW-VND::DL=1000::PAN=2</field> 
+        <field name="5">F=PUR-VND::DL=1000::PAN=3</field> 
+        <field name="6">R=REV::DL=1000::OR=5</field> 
    </organization>        
 </UNI_SIM>
