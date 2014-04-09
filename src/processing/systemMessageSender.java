@@ -95,10 +95,10 @@ public class systemMessageSender extends Thread implements ithreadSequence {
                                 case 200:
                                     systemGlobalInfo.getOriginalMap().add(imsg.getHashCode(), imsg);
                       
-                                    if (imsg.getSourceInterfaceCode().toUpperCase().equals("SIMUI")) {
-                                        IsoMessage revMsg = systemGlobalInfo.getIssResponse(imsg.getDesInterfaceCode()).makeRevFromFin(imsg);
-                                        systemGlobalInfo.getReversalMap().add(revMsg.getHashCode(), revMsg);
-                                    }
+//                                    if (imsg.getSourceInterfaceCode().toUpperCase().equals("SIMUI")) {
+//                                        IsoMessage revMsg = systemGlobalInfo.getIssResponse(imsg.getDesInterfaceCode()).makeRevFromFin(imsg);
+//                                        systemGlobalInfo.getReversalMap().add(revMsg.getHashCode(), revMsg);
+//                                    }
 
                                     break;
                             }

@@ -793,10 +793,10 @@ public class CommonLib {
         return rs;
     }
 
-    public static String getAmmount(int minAmm, int maxAmm, int lengthAmm) {
+    public static String getAmmount(int minAmm, int maxAmm, int digitUnit, int lengthAmm) {
         Random rand = new Random();
         int amm = rand.nextInt(Math.abs(maxAmm - minAmm));
-        return CommonLib.formatIntToString(minAmm + amm,lengthAmm);
+        return CommonLib.formatIntToString((minAmm + amm )* (int)Math.pow(10, digitUnit),lengthAmm);
     }
 
 }

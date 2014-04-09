@@ -101,7 +101,7 @@ public class MainForm extends javax.swing.JFrame {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         chkReversal = new javax.swing.JCheckBox();
-        txtReversal1 = new javax.swing.JTextField();
+        txtReversal = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         btSimSet = new javax.swing.JButton();
         cmbTransType = new javax.swing.JComboBox();
@@ -418,9 +418,9 @@ public class MainForm extends javax.swing.JFrame {
 
         chkReversal.setText("Auto send reversal after");
 
-        txtReversal1.setText("1");
+        txtReversal.setText("100");
 
-        jLabel10.setText("sec");
+        jLabel10.setText("milisec");
 
         btSimSet.setText("SET");
         btSimSet.addActionListener(new java.awt.event.ActionListener() {
@@ -435,25 +435,25 @@ public class MainForm extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addComponent(chkReversal)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtReversal1, javax.swing.GroupLayout.PREFERRED_SIZE, 24, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel10))
-                    .addGroup(jPanel6Layout.createSequentialGroup()
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton4))))
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton4))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addGap(150, 150, 150)
-                .addComponent(btSimSet, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                        .addComponent(chkReversal)
+                        .addGap(18, 18, 18)
+                        .addComponent(txtReversal, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel6Layout.createSequentialGroup()
+                        .addGap(150, 150, 150)
+                        .addComponent(btSimSet, javax.swing.GroupLayout.PREFERRED_SIZE, 87, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(10, 10, 10)
+                .addComponent(jLabel10)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
@@ -463,7 +463,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(chkReversal)
-                    .addComponent(txtReversal1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtReversal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -547,7 +547,7 @@ public class MainForm extends javax.swing.JFrame {
 
         txtOutput.setBackground(new java.awt.Color(0, 0, 0));
         txtOutput.setColumns(20);
-        txtOutput.setFont(new java.awt.Font("Courier New", 0, 10)); // NOI18N
+        txtOutput.setFont(new java.awt.Font("Courier New", 0, 11)); // NOI18N
         txtOutput.setForeground(new java.awt.Color(255, 255, 255));
         txtOutput.setRows(5);
         txtOutput.setTabSize(4);
@@ -622,8 +622,8 @@ public class MainForm extends javax.swing.JFrame {
                 makeMessage.setDesInstitution(cmbACQ.getSelectedItem().toString());
                 makeMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
                 makeMessage.buildMessages();
-                List<IsoMessage> msgRs= makeMessage.getListOfMsg();
-                for(IsoMessage imsg:msgRs){
+                List<IsoMessage> msgRs = makeMessage.getListOfMsg();
+                for (IsoMessage imsg : msgRs) {
                     CommonLib.PrintScreen(systemData, imsg.printedMessage(), showLogEnum.DEFAULT);
                 }
                 break;
@@ -639,6 +639,7 @@ public class MainForm extends javax.swing.JFrame {
                     msgCode = instCmb.substring(0, instCmb.indexOf("("));
                     xmlFile = instCmb.substring(instCmb.indexOf("(") + 1, instCmb.length() - 1);
                     cfgNode tmpNode = systemData.getPatternObj().getTempNode(xmlFile, msgCode);
+
                     Map<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
                     buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
                     System.out.println(controlFieldPatterns.keySet());
@@ -695,7 +696,8 @@ public class MainForm extends javax.swing.JFrame {
                                 String[] amms = value.getFieldValue().split("-");
                                 int minAmm = CommonLib.valueOf(amms[0]);
                                 int maxAmm = CommonLib.valueOf(amms[1]);
-                                buildMessage.setField(CommonLib.valueOf(key), CommonLib.getAmmount(minAmm, maxAmm, 12));
+                                int digit = CommonLib.valueOf(amms[2]);
+                                buildMessage.setField(CommonLib.valueOf(key), CommonLib.getAmmount(minAmm, maxAmm, digit, 12));
                             case AUTO_BITMAP:
                                 break;
                             case AUTO_ZPK:
@@ -728,7 +730,18 @@ public class MainForm extends javax.swing.JFrame {
                     buildMessage.setMessageState(true);
                     systemData.getIcmQueue().systemmessagequeue(buildMessage);
                     txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
+                    if (chkReversal.isSelected()) {
+                        cfgNode revFmt = systemData.getPatternObj().getTempNode(xmlFile, tmpNode.getNodeAtt("rev"));
+                        IsoMessage revMsg = systemData.getIssResponse(cmbACQ.getSelectedItem().toString()).makeRevFromFin(buildMessage, revFmt);
+                        revMsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
+                        revMsg.setDelaytime(CommonLib.valueOf(txtReversal.getText()));
+                        systemData.getIcmQueue().systemmessagequeue(revMsg);
+                        txtOutput.setText(txtOutput.getText() + "\n\r" + new String(revMsg.toByte()));
+                        
 
+                    } else {
+
+                    }
                 }
         }
 
@@ -774,7 +787,7 @@ public class MainForm extends javax.swing.JFrame {
         systemData.getsParas().setIsShowCnns(chkCnns.isSelected());
         systemData.getsParas().setIsShowDetails(chkDetails.isSelected());
         systemData.getsParas().setIsSendReversal(chkReversal.isSelected());
-        systemData.getsParas().setSendRevTime(CommonLib.valueOf(txtReversal1.getText()));
+        systemData.getsParas().setSendRevTime(CommonLib.valueOf(txtReversal.getText()));
     }//GEN-LAST:event_btSimSetActionPerformed
 
     private void cmbTransTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmbTransTypeActionPerformed
@@ -950,6 +963,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtDelay;
     private javax.swing.JTextArea txtOutput;
     private javax.swing.JTextField txtRCManual;
-    private javax.swing.JTextField txtReversal1;
+    private javax.swing.JTextField txtReversal;
     // End of variables declaration//GEN-END:variables
 }

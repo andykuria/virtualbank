@@ -14,12 +14,18 @@ import unisim201401.systemLoader;
  * @author minhdbh
  */
 public interface iIssProcessing {
+
     public void setInstScope(String pIns);
+
     public String getInstScope();
+
     public void setCards(messagePatternLoader cardList);
+
     public void setIssResponseFormat(messagePatternLoader issResponseFormat);
+
     public IsoMessage getResponse(IsoMessage requestMsg);
 
-    public IsoMessage makeRevFromFin(IsoMessage requestMsg);
-     public void setSystemGlobalInfo(systemLoader systemGlobalInfo) ;
+    public IsoMessage makeRevFromFin(IsoMessage requestMsg, cfgNode revFmt);
+
+    public void setSystemGlobalInfo(systemLoader systemGlobalInfo);
 }
