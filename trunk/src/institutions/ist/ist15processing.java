@@ -74,7 +74,7 @@ public class ist15processing implements iIssProcessing {
                     if (checkIssData(requestMsg) != null) {
                         rs = processBI(requestMsg, responseFmt, cd);
                         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()).getSecurityList(rs));
+                        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
                     } else {
                         rs = requestMsg;
                     }
@@ -131,7 +131,7 @@ public class ist15processing implements iIssProcessing {
                     if (checkIssData(requestMsg) != null) {
                         rs = processCW(requestMsg, responseFmt, cd);
                         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()).getSecurityList(rs));
+                        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
                     } else {
                         rs = requestMsg;
                     }
@@ -146,8 +146,6 @@ public class ist15processing implements iIssProcessing {
 
                 case UNKNOWN:
                     break;
-
-                
 
             }
         } catch (Exception ex) {
@@ -178,7 +176,7 @@ public class ist15processing implements iIssProcessing {
                     case AUTO_ORIGINAL:
                         rs.setField(CommonLib.valueOf(iFieldFMT), requestMsg.getField(CommonLib.valueOf(iFieldFMT)));
                         break;
-                    
+
                     case AUTO_BITMAP:
                         break;
                     default:
@@ -272,7 +270,7 @@ public class ist15processing implements iIssProcessing {
         }
         rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
-        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()).getSecurityList(rs));
+        //rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()).getSecurityList(rs));
         return rs;
     }
 
@@ -362,7 +360,7 @@ public class ist15processing implements iIssProcessing {
         }
         rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
-        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()).getSecurityList(rs));
+        //rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
         return rs;
 
     }
@@ -384,13 +382,12 @@ public class ist15processing implements iIssProcessing {
         rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(requestMsg.getDesInterfaceCode()));
         rs.setSourceInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
-        
+
         //List<cfgNode> alLFmt = systemGlobalInfo.getPatternObj().getNodeByType(nodeType.REVERSAL);
         //cfgNode revFmt = null;
         //if (alLFmt.size() > 0) {
         //    revFmt = alLFmt.get(0);
         //}
-        
         if (revFmt != null) {
             List<String> fieldInFmt = revFmt.getFieldKeys();
 
@@ -425,7 +422,7 @@ public class ist15processing implements iIssProcessing {
         rs.setSourceInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()).getSecurityList(rs));
+        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
         return rs;
     }
 }
