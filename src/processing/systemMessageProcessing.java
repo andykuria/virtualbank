@@ -71,7 +71,7 @@ public class systemMessageProcessing extends Thread {
                                                 break;
                                         }
                                     }
-                                    imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()).getSecurityList(imsg));
+                                    imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()));
                                     msgFlowControlQueue.enqueueMessage(imsg);
                                     break;
                                 case RESPONSE:
@@ -82,7 +82,7 @@ public class systemMessageProcessing extends Thread {
                                             CommonLib.PrintScreen(systemGlobalInfo, "Rev response: " + imsg.printedMessage(), showLogEnum.DEFAULT);
                                         } else {
                                             imsg.setDesInterfaceCode(origTranx.getSourceInterfaceCode());
-                                            imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()).getSecurityList(imsg));
+                                            imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()));
                                             msgFlowControlQueue.enqueueMessage(imsg);
                                         }
                                     } else {
@@ -91,7 +91,7 @@ public class systemMessageProcessing extends Thread {
 
                                     break;
                                 case NETWORK_REQUEST:
-                                    imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getSourceInterfaceCode()).getSecurityList(imsg));
+                                    imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getSourceInterfaceCode()));
                                     msgFlowControlQueue.enqueueMessage(imsg);
                                     break;
                                 case NETWORK_RESPONSE:

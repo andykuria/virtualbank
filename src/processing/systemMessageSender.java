@@ -81,40 +81,42 @@ public class systemMessageSender extends Thread implements ithreadSequence {
                         CommonLib.PrintScreen(systemGlobalInfo, "SMS: Drop message " + imsg.getTraceInfo(), showLogEnum.DETAILMODE);
 
                     } else {
+                        if (imsg.getDesInterfaceCode().equals("SIMUI")) {
+                            CommonLib.PrintScreen(systemGlobalInfo, "GET RESPONSE "+imsg.printedMessage(), showLogEnum.DEFAULT);
 
-                        CommonLib.PrintScreen(systemGlobalInfo, "Mesage should send: " + imsg.printedMessage(), showLogEnum.DETAILMODE);
-                        if (systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).checkConectionState()) {
+                        } else {
+                            CommonLib.PrintScreen(systemGlobalInfo, "Mesage should send: " + imsg.printedMessage(), showLogEnum.DETAILMODE);
+                            if (systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).checkConectionState()) {
 
-                            //systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).sendData(imsg.toString());
-                            imsg.setmsgHeader(systemGlobalInfo.getInstitutionData(imsg.getDesInterfaceCode()).getHeaderInfo());
-                            imsg.setLineMode(systemGlobalInfo.getInstitutionData(imsg.getDesInterfaceCode()).getLineMode());
-                            imsg.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(systemGlobalInfo.getInstitutionDataConfig(imsg.getDesInterfaceCode()).getValue("SCOPE")));
+                                //systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).sendData(imsg.toString());
+                                imsg.setmsgHeader(systemGlobalInfo.getInstitutionData(imsg.getDesInterfaceCode()).getHeaderInfo());
+                                imsg.setLineMode(systemGlobalInfo.getInstitutionData(imsg.getDesInterfaceCode()).getLineMode());
+                                imsg.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(systemGlobalInfo.getInstitutionDataConfig(imsg.getDesInterfaceCode()).getValue("SCOPE")));
 
-                            CommonLib.PrintScreen(systemGlobalInfo, "SMS - Sent to socket: " + imsg.printedMessage(), showLogEnum.DEFAULT);
-                            switch (CommonLib.valueOf(imsg.getField(0))) {
-                                case 200:
-                                    systemGlobalInfo.getOriginalMap().add(imsg.getHashCode(), imsg);
-                      
+                                CommonLib.PrintScreen(systemGlobalInfo, "SMS - Sent to socket: " + imsg.printedMessage(), showLogEnum.DEFAULT);
+                                switch (CommonLib.valueOf(imsg.getField(0))) {
+                                    case 200:
+                                        systemGlobalInfo.getOriginalMap().add(imsg.getHashCode(), imsg);
+
 //                                    if (imsg.getSourceInterfaceCode().toUpperCase().equals("SIMUI")) {
 //                                        IsoMessage revMsg = systemGlobalInfo.getIssResponse(imsg.getDesInterfaceCode()).makeRevFromFin(imsg);
 //                                        systemGlobalInfo.getReversalMap().add(revMsg.getHashCode(), revMsg);
 //                                    }
-
-                                    break;
-                            }
-                            switch (CommonLib.valueOf(imsg.getField(70))) {
-                                case 999:
-                                    systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).sendData(imsg.toByte(), imsg.getPortIndex());
-                                    break;
-                                default:
-                                    systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).sendData(imsg.toByte(), -1);
-                            }
+                                        break;
+                                }
+                                switch (CommonLib.valueOf(imsg.getField(70))) {
+                                    case 999:
+                                        systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).sendData(imsg.toByte(), imsg.getPortIndex());
+                                        break;
+                                    default:
+                                        systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).sendData(imsg.toByte(), -1);
+                                }
 
 //                            saveNetworkCfg(imsg);
+                            }
+
                         }
-
                     }
-
                 }
 
             } catch (Exception ex) {

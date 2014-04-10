@@ -50,16 +50,13 @@ public interface iiso8583 {
 
     public void setDesInterfaceCode(String pDesInterfaceCode);
 
-
     public void addSecRequest(secObjInfo psecreq);
 
     public void setSecRequest(Queue<secObjInfo> psecQueueReq);
 
+    public void setSecRequest(iInstitutionSecurity imsgSec);
+
     public secObjInfo peekSecRequest();
-
-    
-
-
 
     public Queue<secObjInfo> getSecurityRequestQueue();
 
