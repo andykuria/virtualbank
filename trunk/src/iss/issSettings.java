@@ -14,6 +14,7 @@ public class issSettings {
     private boolean requireMac=false;
     private boolean delayResponse=false;
     private int delayTime=0;
+    
 
     public issSettings() {
         this.rc=new IssValue(issEnum.AUTO);

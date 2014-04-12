@@ -6,6 +6,7 @@
 package unisim201401;
 
 import cfg.cfgParser;
+import processing.delayTubeProcess;
 import processing.hsmCmdProcess;
 import processing.hsm_queueProcess;
 import processing.systemMessageFlowControlProcess;
@@ -32,7 +33,6 @@ public class Unisim201401 {
         frmsimulator.pack();
         frmsimulator.setVisible(true);
 
-
         systemMessageProcessing msgPreProccess = new systemMessageProcessing();
         msgPreProccess.setSystemGlobalInfo(systemParas);
         msgPreProccess.setMsgFlowControlQueue(systemParas.getFlowControlQueue());
@@ -41,16 +41,13 @@ public class Unisim201401 {
 
         msgPreProccess.start();
 
-
         //systemOutgoingQueue ogiQueue = new systemOutgoingQueue(syscon.getOutQueue());
-
         systemMessageFlowControlProcess flowProcess = new systemMessageFlowControlProcess(systemParas.getFlowControlQueue());
         flowProcess.setSystemGlobalInfo(systemParas);
         flowProcess.sethsmqueue(systemParas.gethsmQueue());
         flowProcess.setSystemControlQueue(systemParas.getFlowControlQueue());
         flowProcess.setInstitutionQueue(systemParas.getOutQueue());
         flowProcess.start();
-
 
         hsm_queueProcess hsmObjProcess = new hsm_queueProcess();
         hsmObjProcess.setSystemGlobalInfo(systemParas);
@@ -60,18 +57,11 @@ public class Unisim201401 {
         hsmObjProcess.setCmdHsmQueue(systemParas.getHsmCmdQueue());
         hsmObjProcess.start();
 
-
-
-        
-
-
         systemMessageSender messageSender = new systemMessageSender();
         messageSender.setSystemGlobalInfo(systemParas);
         messageSender.setInstitutionQueue(systemParas.getOutQueue());
 
         messageSender.start();
-
-
 
         systemParas.startHsmConnector(100);
         systemParas.startInstConnector(messageSender);
@@ -82,6 +72,9 @@ public class Unisim201401 {
         cmdHsmSender.setSystemGlobal(systemParas);
         cmdHsmSender.start();
 
+        delayTubeProcess tubeProc = new delayTubeProcess();
+        tubeProc.setSystemGlobal(systemParas);
+        tubeProc.start();
 
     }
 }

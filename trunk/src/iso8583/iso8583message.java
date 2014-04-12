@@ -39,19 +39,19 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
         }
 
         isIsoMessage = false;
-        
 
     }
 
     /**
      * Contructor, will parse iso message from byte[] input
-     * @param value: byte[] iso message
-     * value = Header + MTI + Bitmap + DataElements[2->128]
+     *
+     * @param value: byte[] iso message value = Header + MTI + Bitmap +
+     * DataElements[2->128]
      */
     public iso8583message(byte[] value) throws bicsexception {
         try {
             ContructMsgFromByte(value);
- 
+
         } catch (bicsexception ex) {
             isIsoMessage = false;
             throw new bicsexception(ex.getErrMessage());
@@ -63,7 +63,6 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
     public iso8583message(String value) throws bicsexception {
         try {
             ContructMsgFromByte(value.getBytes());
- 
 
         } catch (bicsexception ex) {
             throw new bicsexception(ex.getErrMessage());
@@ -106,6 +105,7 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
 
     /**
      * Convert IsoMessage to String
+     *
      * @return iso message string
      */
     //value = Header + MTI + Bitmap + DataElements[2->128]
@@ -166,7 +166,6 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
         //Tinh luon BITMAP cua thong diep gui nguoc toi IST
         bitmap = "";  //Day chinh la thanh phan Bitmap
 
-
         if (isoCfg.checkBinaryField(2)) {
             bitmap = new String(CommonLib.getByteArrayFromBinary(strBinaryBitmap));
         } else {
@@ -189,12 +188,10 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
 
                     return bitmap.getBytes();//CommonLib.getByteArrayFromBinary(haveSecondaryBitmap==true?strBinaryBitmap:strBinaryBitmap.substring(0, 64));
 
-
                 case EBCDIC:
                     return CommonLib.getByteArrayFromBinary(haveSecondaryBitmap == true ? strBinaryBitmap : strBinaryBitmap.substring(0, 64));
                 default:
                     bitmap.getBytes();
-
 
             }
         } else {
@@ -227,7 +224,6 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
             }
         }
 
-
         //Bo sung vao chuoi strBinaryBitmapCUP de dam bao co hoac ko co SecondaryBitmap
         if (haveSecondaryBitmap == true) {
             strBinaryBitmap = "1" + strBinaryBitmap;
@@ -242,7 +238,6 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
                     break;
 
             }
-
 
             strBinaryBitmap = strBinaryBitmap.substring(0, 63) + "1" + strBinaryBitmap.substring(64, strBinaryBitmap.length());
         }
@@ -290,7 +285,6 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
         }
         if (isMessage()) {
 
-
             return fullMessagePrint;
         } else {
             return "Iso parsing error: " + "\n" + fullMessagePrint;
@@ -299,22 +293,27 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
 
     public String getMessageID() {
         String messageID = "";
-        switch (Integer.valueOf(strIsoFields[0])) {
-            case 800:
-            case 810:
-            case 820:
-            case 830:
-                messageID = strIsoFields[0] + "|" + strIsoFields[7] + "|" + strIsoFields[11] + "|" + strIsoFields[32] + "|" + strIsoFields[70];
-                break;
-            case 200:
-            case 210:
-            case 420:
-            case 421:
-            case 430:
-            default:
-                messageID = strIsoFields[0] + "|" + strIsoFields[2] + "|" + strIsoFields[7] + "|" + strIsoFields[11] + "|" + strIsoFields[32];
-                break;
+        try {
+            switch (Integer.valueOf(strIsoFields[0])) {
+                case 800:
+                case 810:
+                case 820:
+                case 830:
+                    messageID = strIsoFields[0] + "|" + strIsoFields[7] + "|" + strIsoFields[11] + "|" + strIsoFields[32] + "|" + strIsoFields[70];
+                    break;
+                case 200:
+                case 210:
+                case 420:
+                case 421:
+                case 430:
+                default:
+                    messageID = strIsoFields[0] + "|" + strIsoFields[2] + "|" + strIsoFields[7] + "|" + strIsoFields[11] + "|" + strIsoFields[32];
+                    break;
+            }
+        } catch (Exception ex) {
+            System.out.println("ERRRRRRRRRRRROR: " + strIsoFields[0] + "|" + strIsoFields[2] + "|" + strIsoFields[7] + "|" + strIsoFields[11] + "|" + strIsoFields[32]);
         }
+
         return messageID;
     }
 
@@ -362,6 +361,7 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
 
     /**
      * Return true if this object contain well-known iso message
+     *
      * @return
      */
     public boolean isMessage() {
@@ -392,7 +392,6 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
     public void setInstitutionCode(String pinstitutionCode) {
     }
 
-
     public int getMTI() {
         return CommonLib.valueOf(getField(0));
 
@@ -409,12 +408,11 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
         }
         return new byte[]{};
     }
-    
-    public String getKeyPatternStr()
-    {
-         String rs= getField(2)+getField(11)+getField(12)+getField(13);
-         rs += getField(41).equals("")?"        ":getField(41).substring(0, 8);
-         return rs;
+
+    public String getKeyPatternStr() {
+        String rs = getField(2) + getField(11) + getField(12) + getField(13);
+        rs += getField(41).equals("") ? "        " : getField(41).substring(0, 8);
+        return rs;
     }
 
     private byte[] toByteEBCDIC() {
@@ -449,11 +447,9 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
 
                         isoMsg = CommonLib.concatByteArray(isoMsg, CommonLib.hex2Byte(strIsoFields[i]));
 
-
                     } else {
                         isoMsg = CommonLib.concatByteArray(isoMsg, strIsoFields[i].getBytes());
                     }
-
 
                 } else {
                     if (isoCfg.checkBinaryField(i)) {
@@ -470,5 +466,4 @@ public abstract class iso8583message extends bicsexception implements Cloneable 
         //return toStringIST().getBytes();
     }
 
-   
 }

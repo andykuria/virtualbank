@@ -160,7 +160,7 @@ public class bnvClient extends Thread implements ithreadMonitor, ithreadSequence
 
                                         CommonLib.PrintScreen(systemGlobal, identifyState + " parsed: " + isoMsg.printedMessage(), showLogEnum.DEFAULT);
 
-                                        incommingqueue.systemmessagequeue(isoMsg);
+                                        incommingqueue.add(isoMsg);
 
                                         //Added by DUNGBTK 08.11.2010
                                         messageStream = CommonLib.copyByteArrayFromArray(messageStream, msg.length, messageStream.length - msg.length);

@@ -456,4 +456,8 @@ public class IsoMessage extends iso8583message implements iiso8583, Cloneable {
         return getHashString().hashCode();
     }
     
+    public void resetTime()
+    {
+        receiveDatetime=DateUtils.getDate();
+    }
 }

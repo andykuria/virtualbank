@@ -68,7 +68,7 @@ public class systemMessageFlowControlProcess extends Thread {
                             if (newSecReq == null) {
 
                                 CommonLib.PrintScreen(systemGlobalInfo, "SMFCP - DONE: " + msg.getTraceInfo(), showLogEnum.DETAILMODE);
-                                outgoingQueue.systemmessagequeue(msg);
+                                outgoingQueue.add(msg);
 
                             } else {
                                 CommonLib.PrintScreen(systemGlobalInfo, String.format("SMFCP - %s: %s", String.valueOf(newSecReq.getTypeOfSec()), msg.getTraceInfo()), showLogEnum.DEFAULT);

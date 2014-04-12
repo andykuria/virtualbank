@@ -124,7 +124,7 @@ public class bnvListener extends Thread {
                                         if (isoMsg.isMessage()) {
                                             isoMsg.setSeqID(CommonLib.getNextSequence());
                                             isoMsg.setMsgType(CommonLib.getMsgType(isoMsg.getField(0)));
-                                            incommingqueue.systemmessagequeue(isoMsg);
+                                            incommingqueue.add(isoMsg);
                                             CommonLib.PrintScreen(systemGlobal, identifyState + " parsed: " + isoMsg.printedMessage(), showLogEnum.DEFAULT);
 
                                             //Added by DUNGBTK 08.11.2010

@@ -35,6 +35,7 @@ import java.util.List;
 import javax.swing.JTextArea;
 import lib.seqManager;
 import processing.dataDictionary;
+import processing.delayTube;
 import processing.hsmCommandQueue;
 
 import processing.hsmSecQueue;
@@ -68,6 +69,7 @@ public class systemLoader {
     private SimParas sParas = new SimParas();
     private dataDictionary<IsoMessage> reversalMap;
     private dataDictionary<IsoMessage> originalMap;
+    private delayTube delayQueue;
     /*private imsgincomming[] icmQueue;
      private imsgoutgoing[] outQueue;*/
     private iqueryactionable[] institutionData;
@@ -164,6 +166,7 @@ public class systemLoader {
         hsmCnns.setSystemSecQueue(msecObjQueue);
         hsmCnns.setSystemGlobal(this);
         issCfg = new issSettings();
+        delayQueue=new delayTube();
     }
 
     public iInstitutionSecurity getSecurityUtils(String zone) {
@@ -423,6 +426,14 @@ public class systemLoader {
 
     public dataDictionary<IsoMessage> getOriginalMap() {
         return originalMap;
+    }
+
+    public delayTube getDelayQueue() {
+        return delayQueue;
+    }
+
+    public void setDelayQueue(delayTube delayQueue) {
+        this.delayQueue = delayQueue;
     }
     
     

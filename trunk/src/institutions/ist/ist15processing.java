@@ -75,6 +75,7 @@ public class ist15processing implements iIssProcessing {
                         rs = processBI(requestMsg, responseFmt, cd);
                         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
                         rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                        rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     } else {
                         rs = requestMsg;
                     }
@@ -132,6 +133,7 @@ public class ist15processing implements iIssProcessing {
                         rs = processCW(requestMsg, responseFmt, cd);
                         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
                         rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                        rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     } else {
                         rs = requestMsg;
                     }
@@ -139,12 +141,16 @@ public class ist15processing implements iIssProcessing {
                 case SIGNON:
                 case SIGNOFF:
                 case ECHO:
-                case REVERSAL:
+
                 case NEWKEY:
+
                     rs = processAutoResponse(requestMsg, responseFmt);
+                case REVERSAL:
+                    rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     break;
 
                 case UNKNOWN:
+
                     break;
 
             }
@@ -158,7 +164,7 @@ public class ist15processing implements iIssProcessing {
         IsoMessage rs = new IsoMessage();
         rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
-        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(requestMsg.getSourceInterfaceCode()));
+        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getSourceInterfaceCode()));
         if (responseFmt != null) {
             List<String> fieldInFmt = responseFmt.getFieldKeys();
             for (String iFieldFMT : fieldInFmt) {

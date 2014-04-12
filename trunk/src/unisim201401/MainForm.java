@@ -44,7 +44,7 @@ public class MainForm extends javax.swing.JFrame {
      */
     public MainForm() {
         initComponents();
-        
+
     }
 
     /**
@@ -58,6 +58,7 @@ public class MainForm extends javax.swing.JFrame {
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
+        buttonGroup3 = new javax.swing.ButtonGroup();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cmbACQ = new javax.swing.JComboBox();
@@ -87,9 +88,11 @@ public class MainForm extends javax.swing.JFrame {
         rtAuthAuto = new javax.swing.JRadioButton();
         rtAuthManual = new javax.swing.JRadioButton();
         txtAuthCode = new javax.swing.JTextField();
-        chkDelay = new javax.swing.JCheckBox();
-        txtDelay = new javax.swing.JTextField();
         btSet = new javax.swing.JButton();
+        jPanel8 = new javax.swing.JPanel();
+        rtDelayRes = new javax.swing.JRadioButton();
+        txtDelay = new javax.swing.JTextField();
+        rtNores = new javax.swing.JRadioButton();
         jPanel6 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jLabel9 = new javax.swing.JLabel();
@@ -292,7 +295,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel5Layout.createSequentialGroup()
                         .addComponent(rtAuthManual)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(18, 18, 18)
                         .addComponent(txtAuthCode, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(rtAuthAuto)
                     .addComponent(rtAuthNone))
@@ -305,7 +308,7 @@ public class MainForm extends javax.swing.JFrame {
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addComponent(jLabel8)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rtAuthNone)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(rtAuthAuto)
@@ -313,12 +316,8 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rtAuthManual)
                     .addComponent(txtAuthCode, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 5, Short.MAX_VALUE))
         );
-
-        chkDelay.setText("Delay response (s)");
-
-        txtDelay.setText("35");
 
         btSet.setText("Set");
         btSet.addActionListener(new java.awt.event.ActionListener() {
@@ -326,6 +325,43 @@ public class MainForm extends javax.swing.JFrame {
                 btSetActionPerformed(evt);
             }
         });
+
+        jPanel8.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        buttonGroup3.add(rtDelayRes);
+        rtDelayRes.setSelected(true);
+        rtDelayRes.setText("Delay response");
+
+        txtDelay.setText("1");
+
+        buttonGroup3.add(rtNores);
+        rtNores.setText("No response");
+
+        javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
+        jPanel8.setLayout(jPanel8Layout);
+        jPanel8Layout.setHorizontalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(rtDelayRes)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(txtDelay))
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addComponent(rtNores)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel8Layout.setVerticalGroup(
+            jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(rtDelayRes)
+                    .addComponent(txtDelay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(rtNores)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -336,20 +372,17 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPanel3Layout.createSequentialGroup()
-                            .addComponent(chkMAC)
-                            .addGap(55, 55, 55))
-                        .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
+                        .addComponent(chkMAC)
+                        .addGap(55, 55, 55))
+                    .addComponent(jPanel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(chkDelay)
-                            .addComponent(btSet, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addComponent(txtDelay, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(15, Short.MAX_VALUE))
+                        .addGap(49, 49, 49)
+                        .addComponent(btSet, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -361,13 +394,11 @@ public class MainForm extends javax.swing.JFrame {
                 .addComponent(chkMAC)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(chkDelay)
-                    .addComponent(txtDelay, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(btSet)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(4, 4, 4))
         );
 
         jPanel6.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -473,7 +504,7 @@ public class MainForm extends javax.swing.JFrame {
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3)
                     .addComponent(jButton5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 78, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(btSimSet)
                 .addContainerGap())
         );
@@ -490,7 +521,7 @@ public class MainForm extends javax.swing.JFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 5, Short.MAX_VALUE)
+                .addGap(5, 5, 5)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -537,12 +568,10 @@ public class MainForm extends javax.swing.JFrame {
                 .addGap(11, 11, 11)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 6, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         txtOutput.setBackground(new java.awt.Color(0, 0, 0));
@@ -566,8 +595,8 @@ public class MainForm extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 737, Short.MAX_VALUE)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 737, Short.MAX_VALUE)
+            .addComponent(jScrollPane4)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 731, Short.MAX_VALUE)
         );
 
         pack();
@@ -578,7 +607,7 @@ public class MainForm extends javax.swing.JFrame {
         reloadTransactionAndCards();
 
     }//GEN-LAST:event_cmbACQActionPerformed
-    
+
     private void reloadTransactionAndCards() {
         DefaultComboBoxModel theModel;
         theModel = (DefaultComboBoxModel) cmbType.getModel();
@@ -586,12 +615,12 @@ public class MainForm extends javax.swing.JFrame {
         theModel = (DefaultComboBoxModel) cmbCards.getModel();
         theModel.removeAllElements();
         if (cmbACQ.getSelectedItem() != null) {
-            
+
             List<String> allType = systemData.getPatternObj().getAllTransactionType(nodeType.valueOf(cmbTransType.getSelectedItem().toString()), cmbACQ.getSelectedItem().toString());
             String[] TypeArray = new String[allType.size()];
             allType.toArray(TypeArray);
             cmbType.setModel(new DefaultComboBoxModel(TypeArray));
-            
+
             List<String> cardList = systemData.getPatternObj().getAllCards((cmbACQ.getSelectedItem() != null) ? cmbACQ.getSelectedItem().toString() : "");
             String[] cardsArray = new String[cardList.size()];
             cardList.toArray(cardsArray);
@@ -625,39 +654,47 @@ public class MainForm extends javax.swing.JFrame {
                 List<IsoMessage> msgRs = makeMessage.getListOfMsg();
                 for (IsoMessage imsg : msgRs) {
                     CommonLib.PrintScreen(systemData, imsg.printedMessage(), showLogEnum.DEFAULT);
+                    imsg.setSecRequest(systemData.getSecurityUtils(imsg.getDesInterfaceCode()));
+                    imsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
+                    imsg.setMsgType(CommonLib.getMsgType(imsg.getField(0)));
+                    if (imsg.getDelaytime() >= 0) {
+                        systemData.getDelayQueue().addMessage(imsg, imsg.getDelaytime());
+                    } else {
+                        systemData.getIcmQueue().add(imsg);
+                    }
                 }
                 break;
             default:
                 IsoMessage buildMessage = new IsoMessage();
                 buildMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
                 buildMessage.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
-                
+
                 buildMessage.setSourceInterfaceCode("SIMUI");
                 if (cmbType.getSelectedItem() != null) {
-                    
+
                     instCmb = cmbType.getSelectedItem().toString();
                     msgCode = instCmb.substring(0, instCmb.indexOf("("));
                     xmlFile = instCmb.substring(instCmb.indexOf("(") + 1, instCmb.length() - 1);
                     cfgNode tmpNode = systemData.getPatternObj().getTempNode(xmlFile, msgCode);
-                    
+
                     Map<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
                     buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
                     System.out.println(controlFieldPatterns.keySet());
                     for (Entry<String, fieldParser> entry : controlFieldPatterns.entrySet()) {
                         String key = entry.getKey();
                         fieldParser value = entry.getValue();
-                        
+
                         switch (value.getType()) {
                             case MANUAL:
                                 JTextField txtManual = mappingMNField.get(key);
                                 buildMessage.setField(CommonLib.valueOf(key), txtManual.getText());
-                                
+
                                 break;
                             case MANUAL_HSM:
                                 secObjInfo pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_GEN_PIN);
                                 if (key.equals("52")) {
                                     pinCmdReq.setFields(new String[]{"52"});
-                                    
+
                                 } else {
                                     pinCmdReq.setFields(new String[]{"48"});
                                 }
@@ -702,7 +739,7 @@ public class MainForm extends javax.swing.JFrame {
                                 break;
                             case AUTO_ZPK:
                                 pinCmdReq = new secObjInfo(msgSecurityEnum.NET_ZPK_GENERATE_ZMK);
-                                
+
                                 pinCmdReq.setHsmCommnadID(CommonLib.getHSMCommandID());
                                 pinCmdReq.setMsgID(buildMessage.getSeqID());
                                 pinCmdReq.setsZone(buildMessage.getSourceInterfaceCode());
@@ -713,7 +750,7 @@ public class MainForm extends javax.swing.JFrame {
                                 pinCmdReq = new secObjInfo(msgSecurityEnum.IN_NEED_OF_MACGEN);
                                 if (key.equals("64")) {
                                     pinCmdReq.setFields(new String[]{"64"});
-                                    
+
                                 } else {
                                     pinCmdReq.setFields(new String[]{"128"});
                                 }
@@ -729,18 +766,20 @@ public class MainForm extends javax.swing.JFrame {
                     }
                     buildMessage.setMessageState(true);
                     buildMessage.setMsgType(CommonLib.getMsgType(buildMessage.getField(0)));
-                    systemData.getIcmQueue().systemmessagequeue(buildMessage);
+                    systemData.getIcmQueue().add(buildMessage);
                     txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
                     cfgNode revFmt = systemData.getPatternObj().getTempNode(xmlFile, tmpNode.getNodeAtt("rev"));
                     IsoMessage revMsg = systemData.getIssResponse(cmbACQ.getSelectedItem().toString()).makeRevFromFin(buildMessage, revFmt);
                     revMsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
                     revMsg.setMsgType(CommonLib.getMsgType(revMsg.getField(0)));
                     if (chkReversal.isSelected()) {
-                        
+
                         revMsg.setDelaytime(CommonLib.valueOf(txtReversal.getText()));
-                        systemData.getIcmQueue().systemmessagequeue(revMsg);
+                        systemData.getDelayQueue().addMessage(revMsg, revMsg.getDelaytime());
+                        //systemData.getIcmQueue().add(revMsg);
+
                         txtOutput.setText(txtOutput.getText() + "\n\r" + new String(revMsg.toByte()));
-                        
+
                     } else {
                         systemData.getReversalMap().add(revMsg.getSeqID(), revMsg);
                     }
@@ -772,14 +811,19 @@ public class MainForm extends javax.swing.JFrame {
             issResponseCfg.getAuth().setType(issEnum.NONE);
             issResponseCfg.getAuth().setValueForFix(txtAuthCode.getText());
         }
-        if (chkDelay.isSelected()) {
-            
+        if (rtDelayRes.isSelected()) {
+            issResponseCfg.setDelayTime(CommonLib.valueOf(txtDelay.getText()));
+            issResponseCfg.setDelayResponse(true);
         } else {
             issResponseCfg.setDelayResponse(false);
             issResponseCfg.setDelayTime(0);
         }
+        if (rtNores.isSelected()) {
+            issResponseCfg.setDelayResponse(true);
+            issResponseCfg.setDelayTime(-1);
+        }
         issResponseCfg.setRequireMac(chkMAC.isSelected());
-        
+
         systemData.setIssCfg(issResponseCfg);
     }//GEN-LAST:event_btSetActionPerformed
 
@@ -831,7 +875,7 @@ public class MainForm extends javax.swing.JFrame {
             }
         });
     }
-    
+
     public void setSystemData(systemLoader systemData) {
         this.systemData = systemData;
         this.systemData.setTaLogs(txtOutput);
@@ -840,12 +884,12 @@ public class MainForm extends javax.swing.JFrame {
         List<String> allInsts = instNode.getFieldKeys();
         String[] InsArray = new String[allInsts.size()];
         allInsts.toArray(InsArray);
-        
+
         DefaultComboBoxModel theModel = (DefaultComboBoxModel) cmbACQ.getModel();
         theModel.removeAllElements();
-        
+
         cmbACQ.setModel(new DefaultComboBoxModel(InsArray));
-        
+
         txtOutput.setLineWrap(true);
         /*theModel = (DefaultComboBoxModel) cmbCards.getModel();
          theModel.removeAllElements();
@@ -857,7 +901,7 @@ public class MainForm extends javax.swing.JFrame {
         //getContentPane().add(cmbACQ, BorderLayout.SOUTH);
         //http://www.coderanch.com/t/529195/GUI/java/set-ID-JCombobox
     }
-    
+
     private void buildCustomControl(cfgNode nodeNeedToBuild) {
         if (mappingMNField != null) {
             mappingMNField.clear();
@@ -866,18 +910,18 @@ public class MainForm extends javax.swing.JFrame {
             int iControl = 0;
             for (iControl = 0; iControl < lblFields.length; iControl++) {
                 lblFields[iControl].setVisible(false);
-                
+
                 lblFields[iControl] = null;
-                
+
                 txtFields[iControl].setVisible(false);
-                
+
                 txtFields[iControl] = null;
-                
+
             }
             lblFields = null;
             txtFields = null;
         }
-        
+
         pnFields1.removeAll();
         pnFields2.removeAll();
         Vector<fieldType> filterFields = new Vector<>();
@@ -921,8 +965,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JButton btSimSet;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
+    private javax.swing.ButtonGroup buttonGroup3;
     private javax.swing.JCheckBox chkCnns;
-    private javax.swing.JCheckBox chkDelay;
     private javax.swing.JCheckBox chkDetails;
     private javax.swing.JCheckBox chkMAC;
     private javax.swing.JCheckBox chkReversal;
@@ -952,6 +996,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JPanel pnFields1;
@@ -959,6 +1004,8 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JRadioButton rtAuthAuto;
     private javax.swing.JRadioButton rtAuthManual;
     private javax.swing.JRadioButton rtAuthNone;
+    private javax.swing.JRadioButton rtDelayRes;
+    private javax.swing.JRadioButton rtNores;
     private javax.swing.JRadioButton rtRCAuto;
     private javax.swing.JRadioButton rtRCManual;
     private javax.swing.JTextField txtAuthCode;
