@@ -77,9 +77,12 @@ public class scenarioMaker {
         listOfMsg = new LinkedList<>();
         cfgNode msgScript = scenarioPattern.getXmlNode("SCRIPT");
         List<String> scriptList = msgScript.getFieldKeys();
+        int delayTime=0;
         for (String scriptid : scriptList) {
             scriptParser sp = new scriptParser(msgScript.getValue(scriptid));
             IsoMessage msgTmp = genMsgFromParretn(sp);
+            delayTime+=msgTmp.getDelaytime();
+            msgTmp.setDelaytime(delayTime);
             listOfMsg.add(msgTmp);
         }
 
