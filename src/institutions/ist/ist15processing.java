@@ -86,6 +86,7 @@ public class ist15processing implements iIssProcessing {
                             rs = requestMsg;
                             rs.peekSecRequest();
                         }
+                        rs.peekSecRequest();
                     }
                     break;
                 case CW:
@@ -152,6 +153,7 @@ public class ist15processing implements iIssProcessing {
                             rs = requestMsg;
                             rs.peekSecRequest();
                         }
+                        rs.peekSecRequest();
                     }
                     break;
                 case SIGNON:
@@ -161,7 +163,9 @@ public class ist15processing implements iIssProcessing {
                 case NEWKEY:
 
                     rs = processAutoResponse(requestMsg, responseFmt);
+                    break;
                 case REVERSAL:
+                    rs = processAutoResponse(requestMsg, responseFmt);
                     rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     break;
 
@@ -208,6 +212,7 @@ public class ist15processing implements iIssProcessing {
             }
 
         }
+        rs.setMessageState(true);
         return rs;
     }
 
@@ -404,7 +409,7 @@ public class ist15processing implements iIssProcessing {
         rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()).getValue("SCOPE")));
         rs.setSourceInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
-
+        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getDesInterfaceCode()));
         //List<cfgNode> alLFmt = systemGlobalInfo.getPatternObj().getNodeByType(nodeType.REVERSAL);
         //cfgNode revFmt = null;
         //if (alLFmt.size() > 0) {
