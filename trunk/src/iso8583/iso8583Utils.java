@@ -146,6 +146,7 @@ public class iso8583Utils {
             } else {
                 //Xu ly khi ko co Secondary Bitmap
                 for (int i = 1; i < 64; i++) {
+                    System.out.println(i+": "+fields[i ]);
                     if (Character.toString(strBitmapBinary.charAt(i)).equals("1")) {
                         if (isoCfg.getIntValue(String.valueOf( i + 1)) == 99) {
 
