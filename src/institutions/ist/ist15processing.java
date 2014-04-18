@@ -77,7 +77,15 @@ public class ist15processing implements iIssProcessing {
                         rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
                         rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     } else {
-                        rs = requestMsg;
+                        if (requestMsg.getSourceInterfaceCode().equals(requestMsg.getDesInterfaceCode())) {
+                            rs = makeAutoResponse(requestMsg, responseFmt, "98");
+                            rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
+                            rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                           // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
+                        } else {
+                            rs = requestMsg;
+                            rs.peekSecRequest();
+                        }
                     }
                     break;
                 case CW:
@@ -135,7 +143,15 @@ public class ist15processing implements iIssProcessing {
                         rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
                         rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     } else {
-                        rs = requestMsg;
+                        if (requestMsg.getSourceInterfaceCode().equals(requestMsg.getDesInterfaceCode())) {
+                            rs = makeAutoResponse(requestMsg, responseFmt, "98");
+                            rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
+                            rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                           // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
+                        } else {
+                            rs = requestMsg;
+                            rs.peekSecRequest();
+                        }
                     }
                     break;
                 case SIGNON:
@@ -385,7 +401,7 @@ public class ist15processing implements iIssProcessing {
     public IsoMessage makeRevFromFin(IsoMessage requestMsg, cfgNode revFmt) {
 
         IsoMessage rs = new IsoMessage();
-        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(requestMsg.getDesInterfaceCode()));
+        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()).getValue("SCOPE")));
         rs.setSourceInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
 
@@ -429,6 +445,56 @@ public class ist15processing implements iIssProcessing {
         rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
         rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+        return rs;
+    }
+
+    @Override
+    public IsoMessage makeAutoResponse(IsoMessage requestMsg, cfgNode responseFmt, String rc) {
+
+        IsoMessage rs = new IsoMessage();
+        rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
+        rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
+        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getSourceInterfaceCode()));
+        if (responseFmt != null) {
+            List<String> fieldInFmt = responseFmt.getFieldKeys();
+            for (String iFieldFMT : fieldInFmt) {
+                fieldParser parseFieldi = new fieldParser(responseFmt.getValue(iFieldFMT));
+                switch (parseFieldi.getType()) {
+                    case AUTO_DATE:
+                        rs.setField(CommonLib.valueOf(iFieldFMT), DateUtils.getCurrentDate());
+                        break;
+                    case AUTO_DATETIME:
+                        rs.setField(CommonLib.valueOf(iFieldFMT), DateUtils.getCurrentDateTime());
+                        break;
+                    case AUTO_TIME:
+                        rs.setField(CommonLib.valueOf(iFieldFMT), DateUtils.getTime());
+                        break;
+                    case AUTO_ORIGINAL:
+                        rs.setField(CommonLib.valueOf(iFieldFMT), requestMsg.getField(CommonLib.valueOf(iFieldFMT)));
+                        break;
+                    case TMP_ACC:
+
+                        rs.setField(CommonLib.valueOf(iFieldFMT), "");
+                        break;
+                    case AUTO_39:
+                        rs.setField(CommonLib.valueOf(iFieldFMT), rc);
+                        break;
+                    case FIXXED_VALUE:
+                        rs.setField(CommonLib.valueOf(iFieldFMT), parseFieldi.getFieldValue());
+                        break;
+                    case AUTO_BITMAP:
+                    default:
+                        break;
+
+                }
+            }
+            rs.setMessageState(true);
+
+        }
+
+        rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
+        rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
+        //rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
         return rs;
     }
 }
