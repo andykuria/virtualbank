@@ -649,7 +649,7 @@ public class MainForm extends javax.swing.JFrame {
                 cfgParser scenarioFile = systemData.getPatternObj().getFileParserByName(xmlFile);
                 scenarioMaker makeMessage = new scenarioMaker(scenarioFile);
                 makeMessage.setDesInstitution(cmbACQ.getSelectedItem().toString());
-                makeMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
+                makeMessage.setIsoCfg(systemData.getIsoFormatByScope(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("SCOPE")));
                 makeMessage.buildMessages();
                 List<IsoMessage> msgRs = makeMessage.getListOfMsg();
                 for (IsoMessage imsg : msgRs) {
@@ -666,7 +666,7 @@ public class MainForm extends javax.swing.JFrame {
                 break;
             default:
                 IsoMessage buildMessage = new IsoMessage();
-                buildMessage.setIsoCfg(systemData.getIsoConfigByInstition(cmbACQ.getSelectedItem().toString()));
+                buildMessage.setIsoCfg(systemData.getIsoFormatByScope(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("SCOPE")));
                 buildMessage.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
 
                 buildMessage.setSourceInterfaceCode("SIMUI");

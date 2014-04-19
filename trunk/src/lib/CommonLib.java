@@ -12,10 +12,12 @@ import iso8583.HeaderProcessing;
 import iso8583.isolib;
 import sun.io.ByteToCharCp500;
 import globalutils.systemconfig;
+import iso8583.IsoMessage;
 import iso8583.IsoMessageType;
 import iss.showLogEnum;
 import java.security.MessageDigest;
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Random;
 import unisim201401.systemLoader;
 
@@ -332,34 +334,35 @@ public class CommonLib {
      * @param messagetoPrint: message to print
      */
     public static void PrintScreen(systemLoader globalCfg, String messagetoPrint, showLogEnum typeOfLog) {
-        System.out.println("[" + DateUtils.getCurrentDateTime() + "]" + " " + messagetoPrint);
-        if (globalCfg != null) {
-            if (globalCfg.getTaLogs() != null) {
-                switch (typeOfLog) {
+        if (messagetoPrint != "") {
+            System.out.println("[" + DateUtils.getCurrentDateTime() + "]" + " " + messagetoPrint);
+            if (globalCfg != null) {
+                if (globalCfg.getTaLogs() != null) {
+                    switch (typeOfLog) {
 
-                    case DEFAULT:
-                        globalCfg.addLogs(messagetoPrint);
-                        break;
-                    case SIMPLEMODE:
-                        if (globalCfg.getsParas().isIsShowSimpleLogs()) {
+                        case DEFAULT:
                             globalCfg.addLogs(messagetoPrint);
-                        }
-                        break;
-                    case CONNECTIONMODE:
-                        if (globalCfg.getsParas().isIsShowCnns()) {
-                            globalCfg.addLogs(messagetoPrint);
-                        }
-                        break;
-                    case DETAILMODE:
-                        if (globalCfg.getsParas().isIsShowDetails()) {
-                            globalCfg.addLogs(messagetoPrint);
-                        }
-                        break;
+                            break;
+                        case SIMPLEMODE:
+                            if (globalCfg.getsParas().isIsShowSimpleLogs()) {
+                                globalCfg.addLogs(messagetoPrint);
+                            }
+                            break;
+                        case CONNECTIONMODE:
+                            if (globalCfg.getsParas().isIsShowCnns()) {
+                                globalCfg.addLogs(messagetoPrint);
+                            }
+                            break;
+                        case DETAILMODE:
+                            if (globalCfg.getsParas().isIsShowDetails()) {
+                                globalCfg.addLogs(messagetoPrint);
+                            }
+                            break;
+                    }
                 }
+
             }
-
         }
-
     }
 
     /**
@@ -796,7 +799,31 @@ public class CommonLib {
     public static String getAmmount(int minAmm, int maxAmm, int digitUnit, int lengthAmm) {
         Random rand = new Random();
         int amm = rand.nextInt(Math.abs(maxAmm - minAmm));
-        return CommonLib.formatIntToString((minAmm + amm )* (int)Math.pow(10, digitUnit),lengthAmm);
+        return CommonLib.formatIntToString((minAmm + amm) * (int) Math.pow(10, digitUnit), lengthAmm);
+    }
+
+    public static String formatMessageListToString(List<IsoMessage> msgList, int typeOfStr) {
+        //typeofstr: 1 is short form
+        //2 is full form
+        String rs = "";
+        if (msgList != null) {
+            if (msgList.size() > 0) {
+                rs += "Process multi message. Total = " + msgList.size();
+                for (IsoMessage imsg : msgList) {
+                    switch (typeOfStr) {
+                        case 1:
+                            rs += "\n\r" + imsg.getTraceInfo();
+                            break;
+                        case 2:
+                            rs += "\n\r--------------------------------\n\r" + imsg.printedMessage();
+                        default:
+                    }
+                }
+            }
+        }
+
+        return rs;
+
     }
 
 }

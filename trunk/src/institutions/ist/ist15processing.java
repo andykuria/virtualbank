@@ -81,10 +81,16 @@ public class ist15processing implements iIssProcessing {
                             rs = makeAutoResponse(requestMsg, responseFmt, "98");
                             rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
                             rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
-                           // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
+                            // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                         } else {
-                            rs = requestMsg;
-                            rs.peekSecRequest();
+                            if (systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()) == null) {
+                                rs = makeAutoResponse(requestMsg, responseFmt, "91");
+                                rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
+                                rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                            } else {
+                                rs = requestMsg;
+                                rs.peekSecRequest();
+                            }
                         }
                         rs.peekSecRequest();
                     }
@@ -148,10 +154,16 @@ public class ist15processing implements iIssProcessing {
                             rs = makeAutoResponse(requestMsg, responseFmt, "98");
                             rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
                             rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
-                           // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
+                            // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                         } else {
-                            rs = requestMsg;
-                            rs.peekSecRequest();
+                            if (systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()) == null) {
+                                rs = makeAutoResponse(requestMsg, responseFmt, "91");
+                                rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
+                                rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                            } else {
+                                rs = requestMsg;
+                                rs.peekSecRequest();
+                            }
                         }
                         rs.peekSecRequest();
                     }
@@ -406,10 +418,11 @@ public class ist15processing implements iIssProcessing {
     public IsoMessage makeRevFromFin(IsoMessage requestMsg, cfgNode revFmt) {
 
         IsoMessage rs = new IsoMessage();
-        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()).getValue("SCOPE")));
+
         rs.setSourceInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
-        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getDesInterfaceCode()));
+        //rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getDesInterfaceCode()));
+        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()).getValue("SCOPE")));
         //List<cfgNode> alLFmt = systemGlobalInfo.getPatternObj().getNodeByType(nodeType.REVERSAL);
         //cfgNode revFmt = null;
         //if (alLFmt.size() > 0) {

@@ -65,14 +65,25 @@ public class ist15security implements iInstitutionSecurity {
                 newSec.setsZone(pmsg.getSourceInterfaceCode());
                 rs.add(newSec);
 
-                if (pmsg.getField(52).equals("")) {
+                if (pmsg.getField(52).length() > 8) {
+                    if (!pmsg.getSourceInterfaceCode().equals("SIMUI")) {
+                        newSec = new secObjInfo(msgSecurityEnum.IN_NEED_OF_PIN);
+                        newSec.setMsgID(pmsg.getSeqID());
+                        newSec.setHsmCommnadID(CommonLib.getHSMCommandID());
+                        newSec.setdZone(pmsg.getDesInterfaceCode());
+                        newSec.setsZone(pmsg.getSourceInterfaceCode());
+                        rs.add(newSec);
+                    }
+
                 } else {
-                    newSec = new secObjInfo(msgSecurityEnum.IN_NEED_GEN_PIN);
-                    newSec.setMsgID(pmsg.getSeqID());
-                    newSec.setHsmCommnadID(CommonLib.getHSMCommandID());
-                    newSec.setdZone(pmsg.getDesInterfaceCode());
-                    newSec.setsZone(pmsg.getSourceInterfaceCode());
-                    rs.add(newSec);
+                    if (pmsg.getField(52).length() >= 4) {
+                        newSec = new secObjInfo(msgSecurityEnum.IN_NEED_GEN_PIN);
+                        newSec.setMsgID(pmsg.getSeqID());
+                        newSec.setHsmCommnadID(CommonLib.getHSMCommandID());
+                        newSec.setdZone(pmsg.getDesInterfaceCode());
+                        newSec.setsZone(pmsg.getSourceInterfaceCode());
+                        rs.add(newSec);
+                    }
                 }
 
                 if (systemGlobalInfo.getInstitutionDataConfig(pmsg.getDesInterfaceCode()).getValue("MAC").toUpperCase().equals("YES")) {
@@ -100,17 +111,17 @@ public class ist15security implements iInstitutionSecurity {
                 newSec.setMsgID(pmsg.getSeqID());
                 newSec.setdZone(pmsg.getDesInterfaceCode());
                 newSec.setsZone(pmsg.getSourceInterfaceCode());
-                rs.add(newSec); 
+                rs.add(newSec);
                 break;
             case NETWORK_RESPONSE:
                 break;
         }
         /*switch (systemGlobalInfo.getInstitutionDataConfig(pmsg.getDesInterfaceCode()).getIntValue("TYPE")) {
-            case 10:
-            case 1://IST
+         case 10:
+         case 1://IST
 
-                break;
-        }*/
+         break;
+         }*/
         return rs;
 
     }
