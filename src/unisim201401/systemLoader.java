@@ -85,12 +85,12 @@ public class systemLoader {
 
     public void initSystemConfig() {
 
-        sequencyService=new seqManager();
-        reversalMap=new dataDictionary<>();
-        originalMap=new dataDictionary<>();
-        
-        systemconfig.SystemTrace=sequencyService.getSeq6();
-        systemconfig.de37=sequencyService.getSeq12();
+        sequencyService = new seqManager();
+        reversalMap = new dataDictionary<>();
+        originalMap = new dataDictionary<>();
+
+        systemconfig.SystemTrace = sequencyService.getSeq6();
+        systemconfig.de37 = sequencyService.getSeq12();
         icmQueue = new systemMessageQueue();
         outQueue = new systemMessageQueue();
         mhsmQueue = new hsmSecQueue();
@@ -166,7 +166,7 @@ public class systemLoader {
         hsmCnns.setSystemSecQueue(msecObjQueue);
         hsmCnns.setSystemGlobal(this);
         issCfg = new issSettings();
-        delayQueue=new delayTube();
+        delayQueue = new delayTube();
     }
 
     public iInstitutionSecurity getSecurityUtils(String zone) {
@@ -178,13 +178,30 @@ public class systemLoader {
         return null;
     }
 
+    public iInstitutionSecurity getINFSecurityUtils(String zone) {
+        String scope = "";
+        cfgNode instCfg = getInstitutionDataConfig(zone);
+        if (instCfg != null) {
+            scope = instCfg.getValue("SCOPE");
+        }
+
+        if (!scope.equals("")) {
+            for (int i = 0; i < securityUtils.length; i++) {
+                if (securityUtils[i].getZone().toUpperCase().equals(scope)) {
+                    return securityUtils[i];
+                }
+            }
+        }
+        return null;
+    }
+
     public void startHsmConnector(int pmilisecound) {
         hsmCnns.initHSM();
 
     }
 
     public cfgNode getIsoFormatByScope(String pScope) {
-        return isoFormatLodaer.getNodeNotInScope("HEADER", pScope).get(0);
+        return isoFormatLodaer.getNodeNotInScope("header", pScope).get(0);
     }
 
     public void startInstConnector(Thread pparentThread) {
@@ -435,8 +452,5 @@ public class systemLoader {
     public void setDelayQueue(delayTube delayQueue) {
         this.delayQueue = delayQueue;
     }
-    
-    
-    
-    
+
 }

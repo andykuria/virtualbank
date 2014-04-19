@@ -26,6 +26,7 @@ public interface iIssProcessing {
     public IsoMessage getResponse(IsoMessage requestMsg);
 
     public IsoMessage makeRevFromFin(IsoMessage requestMsg, cfgNode revFmt);
+    public IsoMessage makeAutoResponse(IsoMessage requestMsg, cfgNode responseFmt, String rc);
 
     public void setSystemGlobalInfo(systemLoader systemGlobalInfo);
 }
