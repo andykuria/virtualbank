@@ -18,6 +18,7 @@ import lib.DateTimeEnum;
 import lib.DateUtils;
 
 import lib.msgSecurityEnum;
+import lib.secObjInfo;
 import unisim201401.systemLoader;
 
 /**
@@ -70,7 +71,17 @@ public class systemMessageProcessing extends Thread {
                                             break;
                                     }
                                 }
-                                imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()));
+                                if (systemGlobalInfo.getINFSecurityUtils(imsg.getDesInterfaceCode()) == null) {
+                                    secObjInfo newSec = new secObjInfo(msgSecurityEnum.MAKE_RESPONSE);
+                                    newSec.setMsgID(imsg.getSeqID());
+                                    newSec.setsZone(imsg.getDesInterfaceCode());
+                                    newSec.setdZone(imsg.getSourceInterfaceCode());
+                                    imsg.addSecRequest(newSec);
+
+                                } else {
+                                    imsg.setSecRequest(systemGlobalInfo.getINFSecurityUtils(imsg.getDesInterfaceCode()));
+                                }
+
                                 msgFlowControlQueue.enqueueMessage(imsg);
                                 break;
                             case RESPONSE:
@@ -81,7 +92,7 @@ public class systemMessageProcessing extends Thread {
                                         CommonLib.PrintScreen(systemGlobalInfo, "Rev response: " + imsg.printedMessage(), showLogEnum.DEFAULT);
                                     } else {
                                         imsg.setDesInterfaceCode(origTranx.getSourceInterfaceCode());
-                                        imsg.setSecRequest(systemGlobalInfo.getSecurityUtils(imsg.getDesInterfaceCode()));
+                                        imsg.setSecRequest(systemGlobalInfo.getINFSecurityUtils(imsg.getDesInterfaceCode()));
                                         msgFlowControlQueue.enqueueMessage(imsg);
                                     }
                                 } else {

@@ -42,6 +42,7 @@ public class delayTubeProcess extends Thread {
             try {
                 if (tubeMessage != null) {
                     List<IsoMessage> msgInTub = tubeMessage.getMessages(DateUtils.getDate());
+                    CommonLib.PrintScreen(systemGlobal, CommonLib.formatMessageListToString(msgInTub, 1), showLogEnum.DEFAULT);
                     for (IsoMessage imsg : msgInTub) {
                         imsg.resetTime();
                         systemGlobal.getIcmQueue().add(imsg);
