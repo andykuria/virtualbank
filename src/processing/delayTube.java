@@ -54,6 +54,7 @@ public class delayTube {
     public List<IsoMessage> getMessages(Date peekTime) {
         List<IsoMessage> rs = new LinkedList();
         long timeGap = DateUtils.DateDiff(DateTimeEnum.MILISECOND, baseTime, peekTime);
+      //  System.out.println(String.format("Delay tube process: basedtime = %s; peekTime=%s, gap=%d", DateUtils.getDateInFormat( baseTime,"mm:ss:SSS"),DateUtils.getDateInFormat( peekTime,"mm:ss:SSS"),timeGap ));
         long lowestTime = get1stKey();
         while ((lowestTime <= timeGap) && (lowestTime >= 0)) {
             IsoMessage timepassMsg = delayMessage.get(lowestTime);
