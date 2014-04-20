@@ -16,6 +16,7 @@ import globalutils.ConfigInfo;
 import globalutils.ConfigType;
 import globalutils.routingEnum;
 import globalutils.systemconfig;
+import hsm.pinInfo;
 import institutions.ist.ist15processing;
 
 import institutions.ist.ist15security;
@@ -69,6 +70,7 @@ public class systemLoader {
     private SimParas sParas = new SimParas();
     private dataDictionary<IsoMessage> reversalMap;
     private dataDictionary<IsoMessage> originalMap;
+    private dataDictionary<pinInfo> pinMap;
     private delayTube delayQueue;
     /*private imsgincomming[] icmQueue;
      private imsgoutgoing[] outQueue;*/
@@ -88,6 +90,7 @@ public class systemLoader {
         sequencyService = new seqManager();
         reversalMap = new dataDictionary<>();
         originalMap = new dataDictionary<>();
+        pinMap=new dataDictionary<>();
 
         systemconfig.SystemTrace = sequencyService.getSeq6();
         systemconfig.de37 = sequencyService.getSeq12();
@@ -452,5 +455,11 @@ public class systemLoader {
     public void setDelayQueue(delayTube delayQueue) {
         this.delayQueue = delayQueue;
     }
+
+    public dataDictionary<pinInfo> getPinMap() {
+        return pinMap;
+    }
+    
+    
 
 }

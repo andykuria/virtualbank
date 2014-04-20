@@ -20,6 +20,7 @@ import iss.showLogEnum;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,6 +28,7 @@ import java.util.Map.Entry;
 import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListModel;
 import javax.swing.JTextField;
 import lib.CommonLib;
 import lib.DateUtils;
@@ -69,7 +71,7 @@ public class MainForm extends javax.swing.JFrame {
         pnFields1 = new javax.swing.JPanel();
         pnFields2 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jList1 = new javax.swing.JList();
+        lstReversal = new javax.swing.JList();
         jLabel2 = new javax.swing.JLabel();
         btSendPattern = new javax.swing.JButton();
         btREVSend = new javax.swing.JButton();
@@ -156,14 +158,9 @@ public class MainForm extends javax.swing.JFrame {
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jList1.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        jScrollPane3.setViewportView(jList1);
+        jScrollPane3.setViewportView(lstReversal);
 
-        jLabel2.setText("Reversal:");
+        jLabel2.setText("Reversal: ID|Institution|PAN|TRACE|DATE");
 
         btSendPattern.setText("SEND");
         btSendPattern.addActionListener(new java.awt.event.ActionListener() {
@@ -173,6 +170,11 @@ public class MainForm extends javax.swing.JFrame {
         });
 
         btREVSend.setText("SEND");
+        btREVSend.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btREVSendActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -188,11 +190,11 @@ public class MainForm extends javax.swing.JFrame {
                     .addComponent(btSendPattern, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 295, Short.MAX_VALUE)
+                    .addComponent(btREVSend, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 207, Short.MAX_VALUE))
-                    .addComponent(jScrollPane3)
-                    .addComponent(btREVSend, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 274, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -782,11 +784,24 @@ public class MainForm extends javax.swing.JFrame {
 
                     } else {
                         systemData.getReversalMap().add(revMsg.getSeqID(), revMsg);
+                        updateListReversal();
                     }
                 }
         }
 
     }//GEN-LAST:event_btSendPatternActionPerformed
+
+    private void updateListReversal() {
+        List<String> revMsgInfo = systemData.getReversalMap().getMsgInfo();
+        Collections.reverse(revMsgInfo);
+        DefaultListModel listRevModel = new DefaultListModel();
+        //DefaultListModel listRevModel = (DefaultListModel) lstReversal.getModel();
+        listRevModel.removeAllElements();
+        for (String iRow : revMsgInfo) {
+            listRevModel.addElement(iRow);
+        }
+        lstReversal.setModel(listRevModel);
+    }
 
     private void btSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSetActionPerformed
         // TODO add your handling code here:
@@ -840,6 +855,22 @@ public class MainForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         reloadTransactionAndCards();
     }//GEN-LAST:event_cmbTransTypeActionPerformed
+
+    private void btREVSendActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btREVSendActionPerformed
+        // TODO add your handling code here:
+        List<String> revMsgStringList = lstReversal.getSelectedValuesList();
+        if (revMsgStringList != null) {
+            for (String selRow : revMsgStringList) {
+                String[] revMsgId = selRow.split("\\|");
+                
+                IsoMessage revMsg = (IsoMessage) systemData.getReversalMap().peek(CommonLib.valueOf(revMsgId[0]));
+                if (revMsg != null) {
+                    systemData.getIcmQueue().add(revMsg);
+                }
+            }
+            updateListReversal();
+        }
+    }//GEN-LAST:event_btREVSendActionPerformed
 
     /**
      * @param args the command line arguments
@@ -988,7 +1019,6 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JList jList1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -999,6 +1029,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JList lstReversal;
     private javax.swing.JPanel pnFields1;
     private javax.swing.JPanel pnFields2;
     private javax.swing.JRadioButton rtAuthAuto;

@@ -7,6 +7,7 @@ package processing;
 import exceptionshandle.bicsexception;
 import globalutils.LogActionEnum;
 import hsm.hsmCmdObj;
+import hsm.pinInfo;
 import iso8583.IsoMessage;
 import iso8583.IsoMessageType;
 import iso8583.isolib;
@@ -14,6 +15,7 @@ import iso8583.msgSecurity;
 import iso8583.msgSecurityCommand;
 import iss.showLogEnum;
 import lib.CommonLib;
+import lib.msgSecurityEnum;
 
 import lib.secObjInfo;
 import lib.securityLib;
@@ -74,6 +76,7 @@ public class hsm_queueProcess extends Thread {
                         } else {
                             CommonLib.PrintScreen(systemGlobalInfo, "HSM Obj queue process "+ msg.getTraceInfo(), showLogEnum.DEFAULT);
                             secObjInfo newSecReq = msg.peekSecRequest();
+                            
                             mSecurityQueue.addMessage(msg);
 
                             secObjInfo mObj = new secObjInfo();
@@ -84,6 +87,15 @@ public class hsm_queueProcess extends Thread {
                             cmdHsm.setHsmCommandID(CommonLib.valueOf(newSecReq.getHsmCommnadID()));
                             cmdHsm.setMsgType(newSecReq.getTypeOfSec());
                             cmdHsm.setCommandHSM(systemGlobalInfo.getSecurityUtils(msg.getDesInterfaceCode()).getSecCommand(msg, newSecReq).getCommandHSM());
+                            if (newSecReq.getTypeOfSec()==msgSecurityEnum.IN_NEED_GEN_PIN)
+                            {
+                                pinInfo newPinCache=new pinInfo();
+                                newPinCache.setPinText(msg.getField(52) );
+                                newPinCache.setInterfaceCode(msg.getDesInterfaceCode());
+                                newPinCache.setHsmID(cmdHsm.getHsmCommandID());
+                                String pinKeyValue=newPinCache.getPinText()+newPinCache.getInterfaceCode();
+                                systemGlobalInfo.getPinMap().add( pinKeyValue.hashCode(), newPinCache);
+                            }
                             cmdHsmQueue.addNewCmd(cmdHsm);
                         }
                     }
