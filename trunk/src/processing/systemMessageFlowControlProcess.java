@@ -4,6 +4,7 @@
  */
 package processing;
 
+import hsm.pinInfo;
 import iso8583.IsoMessage;
 
 import iso8583.isolib;
@@ -74,6 +75,14 @@ public class systemMessageFlowControlProcess extends Thread {
                                 CommonLib.PrintScreen(systemGlobalInfo, String.format("SMFCP - %s: %s", String.valueOf(newSecReq.getTypeOfSec()), msg.getTraceInfo()), showLogEnum.DEFAULT);
 
                                 switch (newSecReq.getTypeOfSec()) {
+                                    case AUTO_RESPONSE:
+                                        if (msg.getSourceInterfaceCode().equals("SIMUI")) {
+                                            msg = systemGlobalInfo.getIssResponse(msg.getDesInterfaceCode()).getResponse(msg);
+                                        } else {
+                                            msg = systemGlobalInfo.getIssResponse(msg.getSourceInterfaceCode()).getResponse(msg);
+                                        }
+                                        mQueue.enqueueMessage(msg);
+                                        break;
 
                                     case MAKE_RESPONSE:
                                         switch (msg.getMsgType()) {
@@ -93,13 +102,28 @@ public class systemMessageFlowControlProcess extends Thread {
                                     case IN_NEED_OF_MACGEN:
                                     case IN_NEED_OF_PIN:
                                     case NET_TAK_GENERATE_ZMK:
-                                    case IN_NEED_GEN_PIN:
+
                                     case NET_TAK_TRANSLATE_ZMK_LMK:
                                     case NET_ZPK_GENERATE_ZMK:
                                     case NET_ZPK_TRASLATE_ZMK_LMK:
 
                                         mhsmqueue.enqueue(msg);
 
+                                        break;
+                                    case IN_NEED_GEN_PIN:
+                                        String pinKeyValue = msg.getField(52) + msg.getDesInterfaceCode();
+                                        pinInfo pinCached = systemGlobalInfo.getPinMap().get(pinKeyValue.hashCode());
+                                        if (pinCached != null) {
+                                            if (pinCached.isPinBlock()) {
+                                                msg.peekSecRequest();
+                                                msg.setField(52, pinCached.getPinBlockInHex());
+                                                mQueue.enqueueMessage(msg);
+                                            } else {
+                                                mhsmqueue.enqueue(msg);
+                                            }
+                                        } else {
+                                            mhsmqueue.enqueue(msg);
+                                        }
                                         break;
 
                                 }
