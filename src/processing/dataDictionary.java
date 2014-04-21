@@ -50,6 +50,11 @@ public class dataDictionary<T> {
     public void remove(Integer key) {
         dic.remove(key);
     }
+    
+    public void clear(){
+        dic.clear();
+    }
+    
 
     public void replace(Integer key, T newval) {
         try {

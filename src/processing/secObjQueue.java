@@ -94,12 +94,12 @@ public class secObjQueue {
 
                             case IN_NEED_OF_MACGEN_MD5:
                                 smSecQueue.removeMessage(secInQueue.getMsgID());
-                                IsoMessage updatedMsg = systemGlobalInfo.getSecurityUtils(msgSecCheck.getDesInterfaceCode()).updateSecurity(msgSecCheck, pSec);
+                                IsoMessage updatedMsg = systemGlobalInfo.getINFSecurityUtils(msgSecCheck.getDesInterfaceCode()).updateSecurity(msgSecCheck, pSec);
                                 msgFlowControl.enqueueMessage(updatedMsg);
                                 break;
                             case IN_NEED_GEN_PIN_ZPK:
                                 smSecQueue.removeMessage(secInQueue.getMsgID());
-                                updatedMsg = systemGlobalInfo.getSecurityUtils(msgSecCheck.getDesInterfaceCode()).updateSecurity(msgSecCheck, pSec);
+                                updatedMsg = systemGlobalInfo.getINFSecurityUtils(msgSecCheck.getDesInterfaceCode()).updateSecurity(msgSecCheck, pSec);
                                 Integer pinCachedKey = systemGlobalInfo.getPinMap().find1stKeyByValue(pSec.getHsmID());
                                 pinInfo pinIncache = systemGlobalInfo.getPinMap().get(systemGlobalInfo.getPinMap().find1stKeyByValue(pSec.getHsmID()));
                                 if (pinIncache != null) {
@@ -125,7 +125,7 @@ public class secObjQueue {
                                 hsmCmdObj cmdHsm = new hsmCmdObj();
                                 cmdHsm.setHsmCommandID(CommonLib.valueOf(newSecReq.getHsmCommnadID()));
                                 cmdHsm.setMsgType(newSecReq.getTypeOfSec());
-                                cmdHsm.setCommandHSM(systemGlobalInfo.getSecurityUtils(msgSecCheck.getDesInterfaceCode()).getSecCommand(msgSecCheck, newSecReq).getCommandHSM());
+                                cmdHsm.setCommandHSM(systemGlobalInfo.getINFSecurityUtils(msgSecCheck.getDesInterfaceCode()).getSecCommand(msgSecCheck, newSecReq).getCommandHSM());
                                 hsmQueue.addNewCmd(cmdHsm);
 
                                 break;

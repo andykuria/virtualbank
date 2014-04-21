@@ -656,7 +656,7 @@ public class MainForm extends javax.swing.JFrame {
                 List<IsoMessage> msgRs = makeMessage.getListOfMsg();
                 for (IsoMessage imsg : msgRs) {
                     CommonLib.PrintScreen(systemData, imsg.printedMessage(), showLogEnum.DEFAULT);
-                    imsg.setSecRequest(systemData.getSecurityUtils(imsg.getDesInterfaceCode()));
+                    imsg.setSecRequest(systemData.getINFSecurityUtils(imsg.getDesInterfaceCode()));
                     imsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
                     imsg.setMsgType(CommonLib.getMsgType(imsg.getField(0)));
                     if (imsg.getDelaytime() >= 0) {

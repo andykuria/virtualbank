@@ -56,8 +56,6 @@ public class hsm_queueProcess extends Thread {
     public void setCmdHsmQueue(hsmCommandQueue cmdHsmQueue) {
         this.cmdHsmQueue = cmdHsmQueue;
     }
-    
-    
 
     @Override
     public void run() {
@@ -71,30 +69,41 @@ public class hsm_queueProcess extends Thread {
                         //if (DateUtils.DateDiff(DateTimeEnum.SECOND, msg.getReceiveDatetime(), DateUtils.getDate()) >= systemGlobalInfo.getSystemConfig().getIntValue("SYSTEM", "QOS")) {
                         if (isolib.isDropState(msg, systemGlobalInfo.getSystemConfig().getIntValue("GLOBAL", "QOS"))) {
                             //msgStateDone.add(String.valueOf(msg.getMessageInID()));
-                            CommonLib.PrintScreen(systemGlobalInfo, "ERR SMFCP: Drop message " + msg.getTraceInfo(),showLogEnum.DETAILMODE);
+                            CommonLib.PrintScreen(systemGlobalInfo, "ERR SMFCP: Drop message " + msg.getTraceInfo(), showLogEnum.DETAILMODE);
 
                         } else {
-                            CommonLib.PrintScreen(systemGlobalInfo, "HSM Obj queue process "+ msg.getTraceInfo(), showLogEnum.DEFAULT);
+                            CommonLib.PrintScreen(systemGlobalInfo, "HSM Obj queue process " + msg.getTraceInfo(), showLogEnum.DEFAULT);
                             secObjInfo newSecReq = msg.peekSecRequest();
-                            
+
                             mSecurityQueue.addMessage(msg);
 
                             secObjInfo mObj = new secObjInfo();
                             mObjSecQueue.addSecObj(newSecReq);
 
-                            
                             hsmCmdObj cmdHsm = new hsmCmdObj();
                             cmdHsm.setHsmCommandID(CommonLib.valueOf(newSecReq.getHsmCommnadID()));
                             cmdHsm.setMsgType(newSecReq.getTypeOfSec());
-                            cmdHsm.setCommandHSM(systemGlobalInfo.getSecurityUtils(msg.getDesInterfaceCode()).getSecCommand(msg, newSecReq).getCommandHSM());
-                            if (newSecReq.getTypeOfSec()==msgSecurityEnum.IN_NEED_GEN_PIN)
-                            {
-                                pinInfo newPinCache=new pinInfo();
-                                newPinCache.setPinText(msg.getField(52) );
+                            switch (msg.getMsgType()) {
+                                case REQUEST:
+                                case RESPONSE:
+                                case SYSTEM_SIM_SEND:
+                                    cmdHsm.setCommandHSM(systemGlobalInfo.getINFSecurityUtils(msg.getDesInterfaceCode()).getSecCommand(msg, newSecReq).getCommandHSM());
+                                    break;
+                                case NETWORK_REQUEST:
+                                case NETWORK_RESPONSE:
+                                    cmdHsm.setCommandHSM(systemGlobalInfo.getINFSecurityUtils(msg.getSourceInterfaceCode()).getSecCommand(msg, newSecReq).getCommandHSM());
+
+                                    break;
+
+                            }
+
+                            if (newSecReq.getTypeOfSec() == msgSecurityEnum.IN_NEED_GEN_PIN) {
+                                pinInfo newPinCache = new pinInfo();
+                                newPinCache.setPinText(msg.getField(52));
                                 newPinCache.setInterfaceCode(msg.getDesInterfaceCode());
                                 newPinCache.setHsmID(cmdHsm.getHsmCommandID());
-                                String pinKeyValue=newPinCache.getPinText()+newPinCache.getInterfaceCode();
-                                systemGlobalInfo.getPinMap().add( pinKeyValue.hashCode(), newPinCache);
+                                String pinKeyValue = newPinCache.getPinText() + newPinCache.getInterfaceCode();
+                                systemGlobalInfo.getPinMap().add(pinKeyValue.hashCode(), newPinCache);
                             }
                             cmdHsmQueue.addNewCmd(cmdHsm);
                         }
