@@ -107,6 +107,23 @@ public class ist15security implements iInstitutionSecurity {
                 }
                 break;
             case NETWORK_REQUEST:
+                switch (CommonLib.valueOf(pmsg.getField(70))) {
+                    case 161: //new key
+                        if (pmsg.getField(48).indexOf("MAK") >= 0) {
+                            newSec = new secObjInfo(msgSecurityEnum.NET_TAK_TRANSLATE_ZMK_LMK);
+
+                        } else {
+                            newSec = new secObjInfo(msgSecurityEnum.NET_ZPK_TRASLATE_ZMK_LMK);
+
+                        }
+
+                        newSec.setMsgID(pmsg.getSeqID());
+                        newSec.setdZone(pmsg.getDesInterfaceCode());
+                        newSec.setsZone(pmsg.getSourceInterfaceCode());
+                        rs.add(newSec);
+
+                }
+
                 newSec = new secObjInfo(msgSecurityEnum.MAKE_RESPONSE);
                 newSec.setMsgID(pmsg.getSeqID());
                 newSec.setdZone(pmsg.getDesInterfaceCode());

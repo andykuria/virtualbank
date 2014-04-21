@@ -74,19 +74,19 @@ public class ist15processing implements iIssProcessing {
                     if (checkIssData(requestMsg) != null) {
                         rs = processBI(requestMsg, responseFmt, cd);
                         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                        rs.setSecRequest(systemGlobalInfo.getINFSecurityUtils(rs.getDesInterfaceCode()));
                         rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     } else {
                         if (requestMsg.getSourceInterfaceCode().equals(requestMsg.getDesInterfaceCode())) {
                             rs = makeAutoResponse(requestMsg, responseFmt, "98");
                             rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                            rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                            rs.setSecRequest(systemGlobalInfo.getINFSecurityUtils(rs.getDesInterfaceCode()));
                             // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                         } else {
                             if (systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()) == null) {
                                 rs = makeAutoResponse(requestMsg, responseFmt, "91");
                                 rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                                rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                                rs.setSecRequest(systemGlobalInfo.getINFSecurityUtils(rs.getDesInterfaceCode()));
                             } else {
                                 rs = requestMsg;
                                 rs.peekSecRequest();
@@ -147,19 +147,19 @@ public class ist15processing implements iIssProcessing {
                     if (checkIssData(requestMsg) != null) {
                         rs = processCW(requestMsg, responseFmt, cd);
                         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                        rs.setSecRequest(systemGlobalInfo.getINFSecurityUtils(rs.getDesInterfaceCode()));
                         rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                     } else {
                         if (requestMsg.getSourceInterfaceCode().equals(requestMsg.getDesInterfaceCode())) {
                             rs = makeAutoResponse(requestMsg, responseFmt, "98");
                             rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                            rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                            rs.setSecRequest(systemGlobalInfo.getINFSecurityUtils(rs.getDesInterfaceCode()));
                             // rs.setDelaytime(systemGlobalInfo.getIssCfg().getDelayTime());
                         } else {
                             if (systemGlobalInfo.getInstitutionDataConfig(requestMsg.getDesInterfaceCode()) == null) {
                                 rs = makeAutoResponse(requestMsg, responseFmt, "91");
                                 rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-                                rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+                                rs.setSecRequest(systemGlobalInfo.getINFSecurityUtils(rs.getDesInterfaceCode()));
                             } else {
                                 rs = requestMsg;
                                 rs.peekSecRequest();
@@ -462,7 +462,7 @@ public class ist15processing implements iIssProcessing {
         rs.setSourceInterfaceCode(requestMsg.getSourceInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getDesInterfaceCode());
         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
-        rs.setSecRequest(systemGlobalInfo.getSecurityUtils(rs.getDesInterfaceCode()));
+        rs.setSecRequest(systemGlobalInfo.getINFSecurityUtils(rs.getDesInterfaceCode()));
         return rs;
     }
 
