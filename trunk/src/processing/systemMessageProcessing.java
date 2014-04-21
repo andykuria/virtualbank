@@ -70,18 +70,18 @@ public class systemMessageProcessing extends Thread {
                                             imsg.setDesInterfaceCode(rt.getRoutingByPort(imsg.getSourceInterfaceCode()));
                                             break;
                                     }
-                                }
-                                if (systemGlobalInfo.getINFSecurityUtils(imsg.getDesInterfaceCode()) == null) {
-                                    secObjInfo newSec = new secObjInfo(msgSecurityEnum.AUTO_RESPONSE);
-                                    newSec.setMsgID(imsg.getSeqID());
-                                    newSec.setsZone(imsg.getDesInterfaceCode());
-                                    newSec.setdZone(imsg.getSourceInterfaceCode());
-                                    imsg.addSecRequest(newSec);
+                                    if (systemGlobalInfo.getINFSecurityUtils(imsg.getDesInterfaceCode()) == null) {
+                                        secObjInfo newSec = new secObjInfo(msgSecurityEnum.AUTO_RESPONSE);
+                                        newSec.setMsgID(imsg.getSeqID());
+                                        newSec.setsZone(imsg.getDesInterfaceCode());
+                                        newSec.setdZone(imsg.getSourceInterfaceCode());
+                                        imsg.addSecRequest(newSec);
                                     //imsg.setDesInterfaceCode(newSec.getdZone());
-                                    //imsg.setSourceInterfaceCode(newSec.getsZone());
+                                        //imsg.setSourceInterfaceCode(newSec.getsZone());
 
-                                } else {
-                                    imsg.setSecRequest(systemGlobalInfo.getINFSecurityUtils(imsg.getDesInterfaceCode()));
+                                    } else {
+                                        imsg.setSecRequest(systemGlobalInfo.getINFSecurityUtils(imsg.getDesInterfaceCode()));
+                                    }
                                 }
 
                                 msgFlowControlQueue.enqueueMessage(imsg);
