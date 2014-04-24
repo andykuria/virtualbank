@@ -667,6 +667,7 @@ public class MainForm extends javax.swing.JFrame {
                 }
                 break;
             default:
+            case FINACIAL:
                 IsoMessage buildMessage = new IsoMessage();
                 buildMessage.setIsoCfg(systemData.getIsoFormatByScope(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("SCOPE")));
                 buildMessage.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
@@ -770,23 +771,27 @@ public class MainForm extends javax.swing.JFrame {
                     buildMessage.setMsgType(CommonLib.getMsgType(buildMessage.getField(0)));
                     systemData.getIcmQueue().add(buildMessage);
                     txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
-                    cfgNode revFmt = systemData.getPatternObj().getTempNode(xmlFile, tmpNode.getNodeAtt("rev"));
-                    IsoMessage revMsg = systemData.getIssResponse(cmbACQ.getSelectedItem().toString()).makeRevFromFin(buildMessage, revFmt);
-                    revMsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
-                    revMsg.setMsgType(CommonLib.getMsgType(revMsg.getField(0)));
-                    if (chkReversal.isSelected()) {
+                    if (nodeType.valueOf(cmbTransType.getSelectedItem().toString()) == nodeType.REVERSAL) {
+                        cfgNode revFmt = systemData.getPatternObj().getTempNode(xmlFile, tmpNode.getNodeAtt("rev"));
+                        IsoMessage revMsg = systemData.getIssResponse(cmbACQ.getSelectedItem().toString()).makeRevFromFin(buildMessage, revFmt);
+                        revMsg.setLineMode(LineModeEnum.valueOf(systemData.getInstitutionDataConfig(cmbACQ.getSelectedItem().toString()).getValue("LINEMODE")));
+                        revMsg.setMsgType(CommonLib.getMsgType(revMsg.getField(0)));
+                        if (chkReversal.isSelected()) {
 
-                        revMsg.setDelaytime(CommonLib.valueOf(txtReversal.getText()));
-                        systemData.getDelayQueue().addMessage(revMsg, revMsg.getDelaytime());
-                        //systemData.getIcmQueue().add(revMsg);
+                            revMsg.setDelaytime(CommonLib.valueOf(txtReversal.getText()));
+                            systemData.getDelayQueue().addMessage(revMsg, revMsg.getDelaytime());
+                            //systemData.getIcmQueue().add(revMsg);
 
-                        txtOutput.setText(txtOutput.getText() + "\n\r" + new String(revMsg.toByte()));
+                            txtOutput.setText(txtOutput.getText() + "\n\r" + new String(revMsg.toByte()));
 
-                    } else {
-                        systemData.getReversalMap().add(revMsg.getSeqID(), revMsg);
-                        updateListReversal();
+                        } else {
+                            systemData.getReversalMap().add(revMsg.getSeqID(), revMsg);
+                            updateListReversal();
+                        }
                     }
+
                 }
+
         }
 
     }//GEN-LAST:event_btSendPatternActionPerformed
@@ -862,7 +867,7 @@ public class MainForm extends javax.swing.JFrame {
         if (revMsgStringList != null) {
             for (String selRow : revMsgStringList) {
                 String[] revMsgId = selRow.split("\\|");
-                
+
                 IsoMessage revMsg = (IsoMessage) systemData.getReversalMap().peek(CommonLib.valueOf(revMsgId[0]));
                 if (revMsg != null) {
                     systemData.getIcmQueue().add(revMsg);

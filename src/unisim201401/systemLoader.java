@@ -34,6 +34,7 @@ import iss.iIssProcessing;
 import iss.issSettings;
 import java.util.List;
 import javax.swing.JTextArea;
+import lib.instBOX;
 import lib.seqManager;
 import processing.dataDictionary;
 import processing.delayTube;
@@ -71,6 +72,7 @@ public class systemLoader {
     private dataDictionary<IsoMessage> reversalMap;
     private dataDictionary<IsoMessage> originalMap;
     private dataDictionary<pinInfo> pinMap;
+    private dataDictionary<instBOX> cfgSecurityChangedMap;
     private delayTube delayQueue;
     /*private imsgincomming[] icmQueue;
      private imsgoutgoing[] outQueue;*/
@@ -90,7 +92,8 @@ public class systemLoader {
         sequencyService = new seqManager();
         reversalMap = new dataDictionary<>();
         originalMap = new dataDictionary<>();
-        pinMap=new dataDictionary<>();
+        pinMap = new dataDictionary<>();
+        cfgSecurityChangedMap = new dataDictionary<>();
 
         systemconfig.SystemTrace = sequencyService.getSeq6();
         systemconfig.de37 = sequencyService.getSeq12();
@@ -459,7 +462,24 @@ public class systemLoader {
     public dataDictionary<pinInfo> getPinMap() {
         return pinMap;
     }
-    
-    
+
+    public dataDictionary<instBOX> getCfgSecurityChangedMap() {
+        return cfgSecurityChangedMap;
+    }
+
+    public cfgParser getInstitutionCFG(String pInst) {
+        cfgParser rs;
+        try {
+            if (instCfg != null) {
+                for (int i = 0; i < instCfg.length; i++) {
+                    if (instCfg[i].getValue("INSTITUTION", "INTERFACECODE").toUpperCase().equals(pInst.toUpperCase())) {
+                        return instCfg[i];
+                    }
+                }
+            }
+        } catch (Exception ex) {
+        }
+        return null;
+    }
 
 }
