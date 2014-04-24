@@ -76,7 +76,7 @@ public class systemMessageProcessing extends Thread {
                                         newSec.setsZone(imsg.getDesInterfaceCode());
                                         newSec.setdZone(imsg.getSourceInterfaceCode());
                                         imsg.addSecRequest(newSec);
-                                    //imsg.setDesInterfaceCode(newSec.getdZone());
+                                        //imsg.setDesInterfaceCode(newSec.getdZone());
                                         //imsg.setSourceInterfaceCode(newSec.getsZone());
 
                                     } else {
@@ -107,6 +107,8 @@ public class systemMessageProcessing extends Thread {
                                 msgFlowControlQueue.enqueueMessage(imsg);
                                 break;
                             case NETWORK_RESPONSE:
+                                imsg.setSecRequest(systemGlobalInfo.getINFSecurityUtils(imsg.getSourceInterfaceCode()));
+                                msgFlowControlQueue.enqueueMessage(imsg);
                                 break;
                             default:
                                 msgFlowControlQueue.enqueueMessage(imsg);

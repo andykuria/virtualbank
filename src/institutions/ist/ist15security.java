@@ -47,6 +47,7 @@ public class ist15security implements iInstitutionSecurity {
         Queue<secObjInfo> rs = new ConcurrentLinkedDeque<>();
         secObjInfo newSec;
         switch (pmsg.getMsgType()) {
+            
             case REQUEST:
                 if (systemGlobalInfo.getIssCfg().isRequireMac()) {
                     if ((!pmsg.getField(64).equals("")) || (!pmsg.getField(128).equals(""))) {
