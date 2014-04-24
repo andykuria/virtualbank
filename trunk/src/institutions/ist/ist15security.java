@@ -219,7 +219,7 @@ public class ist15security implements iInstitutionSecurity {
                     hsmObjRs.setCommandHSM(
                             hsmLib.TranslateTAK_ZMK2TAK_LMK(
                                     CommonLib.formatToString(String.valueOf(pSecType.getHsmCommnadID()), '0', 4),
-                                    keyManager.getZMK(pmsg.getDesInterfaceCode(), systemGlobalInfo),
+                                    keyManager.getZMK(pmsg.getSourceInterfaceCode(), systemGlobalInfo),
                                     pmsg.getField(48).substring(6)));
                 }
                 break;
@@ -233,13 +233,13 @@ public class ist15security implements iInstitutionSecurity {
                     hsmObjRs.setCommandHSM(
                             hsmLib.TranslateZPK_ZMK2ZPK_LMK(
                                     CommonLib.formatToString(String.valueOf(pSecType.getHsmCommnadID()), '0', 4),
-                                    keyManager.getZMK(pmsg.getDesInterfaceCode(), systemGlobalInfo),
+                                    keyManager.getZMK(pmsg.getSourceInterfaceCode(), systemGlobalInfo),
                                     pmsg.getField(48).substring(6)));
                 } else {
                     hsmObjRs.setCommandHSM(
                             hsmLib.TranslateZPK_ZMK2ZPK_LMK(
                                     CommonLib.formatToString(String.valueOf(pSecType.getHsmCommnadID()), '0', 4),
-                                    keyManager.getZMK(pmsg.getDesInterfaceCode(), systemGlobalInfo),
+                                    keyManager.getZMK(pmsg.getSourceInterfaceCode(), systemGlobalInfo),
                                     pmsg.getField(48)));
                 }
                 break;

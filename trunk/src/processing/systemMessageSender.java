@@ -4,6 +4,8 @@
  */
 package processing;
 
+import cfg.cfgNode;
+import cfg.cfgParser;
 import ginterface.ithreadSequence;
 import globalutils.LogActionEnum;
 
@@ -82,7 +84,7 @@ public class systemMessageSender extends Thread implements ithreadSequence {
 
                     } else {
                         if (imsg.getDesInterfaceCode().equals("SIMUI")) {
-                            CommonLib.PrintScreen(systemGlobalInfo, "GET RESPONSE "+imsg.printedMessage(), showLogEnum.DEFAULT);
+                            CommonLib.PrintScreen(systemGlobalInfo, "GET RESPONSE " + imsg.printedMessage(), showLogEnum.DEFAULT);
 
                         } else {
                             CommonLib.PrintScreen(systemGlobalInfo, "Mesage should send: " + imsg.printedMessage(), showLogEnum.DETAILMODE);
@@ -112,7 +114,7 @@ public class systemMessageSender extends Thread implements ithreadSequence {
                                         systemGlobalInfo.getConnectorByInstitution(imsg.getDesInterfaceCode()).sendData(imsg.toByte(), -1);
                                 }
 
-//                            saveNetworkCfg(imsg);
+                                saveNetworkCfg(imsg);
                             }
 
                         }
@@ -130,6 +132,36 @@ public class systemMessageSender extends Thread implements ithreadSequence {
 
         }
     }
+
+    private void saveNetworkCfg(IsoMessage pmsg) {
+        instBOX cfgValue = systemGlobalInfo.getCfgSecurityChangedMap().get(pmsg.getSeqID());
+        if (cfgValue != null) {
+            cfgParser instCfg = systemGlobalInfo.getInstitutionCFG(cfgValue.getInstCode());
+            String instKeyType = instCfg.getValue("INSTITUTION", "KEYTYPE").toUpperCase();
+            switch (cfgValue.getBoxType()) {
+                case NET_TAK_TRANSLATE_ZMK_LMK:
+                case NET_TAK_GENERATE_ZMK:
+                    if ((instKeyType.equals("SHARED")) || (instKeyType.equals(""))) {
+                        instCfg.setValue("INSTITUTION", "TAK", cfgValue.getBoxValue());;
+                    } else {
+                        instCfg.setValue("INSTITUTION", "TAK_" + cfgValue.getBoxTAG(), cfgValue.getBoxValue());;
+                    }
+                    instCfg.saveCfg(instCfg.getFileName());
+                    break;
+                case NET_ZPK_TRASLATE_ZMK_LMK:
+                case NET_ZPK_GENERATE_ZMK:
+                    if ((instKeyType.equals("SHARED")) || (instKeyType.equals(""))) {
+                        instCfg.setValue("INSTITUTION", "ZPK", cfgValue.getBoxValue());;
+                    } else {
+                        instCfg.setValue("INSTITUTION", "ZPK_" + cfgValue.getBoxTAG(), cfgValue.getBoxValue());;
+                    }
+                    instCfg.saveCfg(instCfg.getFileName());
+                    break;
+
+            }
+        }
+    }
+
     /*
      private void saveNetworkCfg(IsoMessage pmsg) {
      switch (pmsg.getMsgType()) {
