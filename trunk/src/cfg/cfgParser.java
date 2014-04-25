@@ -276,6 +276,10 @@ public class cfgParser {
         return nodeKeys;
     }
 
+    public String getABsolutePath()
+    {
+        return xmlFileCfg;
+    }
     public String getFileName() {
         String[] allPaths = xmlFileCfg.split("/");
         return allPaths[allPaths.length - 1];

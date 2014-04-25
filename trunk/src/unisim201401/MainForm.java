@@ -681,7 +681,7 @@ public class MainForm extends javax.swing.JFrame {
                     cfgNode tmpNode = systemData.getPatternObj().getTempNode(xmlFile, msgCode);
 
                     Map<String, fieldParser> controlFieldPatterns = tmpNode.getFieldPatternFromNode();
-                    buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
+                    //buildMessage.setDesInterfaceCode(tmpNode.getNodeAtt("des"));
                     System.out.println(controlFieldPatterns.keySet());
                     for (Entry<String, fieldParser> entry : controlFieldPatterns.entrySet()) {
                         String key = entry.getKey();
@@ -769,6 +769,7 @@ public class MainForm extends javax.swing.JFrame {
                     }
                     buildMessage.setMessageState(true);
                     buildMessage.setMsgType(CommonLib.getMsgType(buildMessage.getField(0)));
+                    buildMessage.setDesInterfaceCode(cmbACQ.getSelectedItem().toString() );
                     systemData.getIcmQueue().add(buildMessage);
                     txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
                     if (nodeType.valueOf(cmbTransType.getSelectedItem().toString()) == nodeType.REVERSAL) {

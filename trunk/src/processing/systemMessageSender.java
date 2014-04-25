@@ -134,7 +134,7 @@ public class systemMessageSender extends Thread implements ithreadSequence {
     }
 
     private void saveNetworkCfg(IsoMessage pmsg) {
-        instBOX cfgValue = systemGlobalInfo.getCfgSecurityChangedMap().get(pmsg.getSeqID());
+        instBOX cfgValue = systemGlobalInfo.getCfgSecurityChangedMap().peek(pmsg.getSeqID());
         if (cfgValue != null) {
             cfgParser instCfg = systemGlobalInfo.getInstitutionCFG(cfgValue.getInstCode());
             String instKeyType = instCfg.getValue("INSTITUTION", "KEYTYPE").toUpperCase();
@@ -146,7 +146,7 @@ public class systemMessageSender extends Thread implements ithreadSequence {
                     } else {
                         instCfg.setValue("INSTITUTION", "TAK_" + cfgValue.getBoxTAG(), cfgValue.getBoxValue());;
                     }
-                    instCfg.saveCfg(instCfg.getFileName());
+                    instCfg.saveCfg(instCfg.getABsolutePath());
                     break;
                 case NET_ZPK_TRASLATE_ZMK_LMK:
                 case NET_ZPK_GENERATE_ZMK:
@@ -155,7 +155,7 @@ public class systemMessageSender extends Thread implements ithreadSequence {
                     } else {
                         instCfg.setValue("INSTITUTION", "ZPK_" + cfgValue.getBoxTAG(), cfgValue.getBoxValue());;
                     }
-                    instCfg.saveCfg(instCfg.getFileName());
+                    instCfg.saveCfg(instCfg.getABsolutePath());
                     break;
 
             }
