@@ -13,13 +13,12 @@ import iso8583.msgSecurity;
 import iss.showLogEnum;
 import java.io.DataInputStream;
 
-
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-
 import lib.CommonLib;
+import lib.instBOX;
 import lib.msgSecurityEnum;
 import processing.secObjQueue;
 import unisim201401.systemLoader;
@@ -42,12 +41,12 @@ public class hsmProcess extends Thread implements ithreadMonitor, ithreadSequenc
     private boolean threadStatus = false;
     private secObjQueue securityQueue;
 
-    
-     private systemLoader systemGlobal;
+    private systemLoader systemGlobal;
 
     public void setSystemGlobal(systemLoader systemGlobal) {
         this.systemGlobal = systemGlobal;
     }
+
     public void setQueueSecurity(secObjQueue pqueueSecurity) {
         this.securityQueue = pqueueSecurity;
     }
@@ -79,7 +78,7 @@ public class hsmProcess extends Thread implements ithreadMonitor, ithreadSequenc
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException ex) {
-                            CommonLib.PrintScreen(systemGlobal, "Couldn't do waiting HSM process " + institutionIndex,showLogEnum.DETAILMODE);
+                            CommonLib.PrintScreen(systemGlobal, "Couldn't do waiting HSM process " + institutionIndex, showLogEnum.DETAILMODE);
                         }
                     } else {
                         break;
@@ -89,7 +88,6 @@ public class hsmProcess extends Thread implements ithreadMonitor, ithreadSequenc
                 }
             }
         }
-
 
         initSocket();
         CommonLib.PrintScreen(systemGlobal, " HSM process is started " + institutionIndex, showLogEnum.DETAILMODE);
@@ -103,18 +101,19 @@ public class hsmProcess extends Thread implements ithreadMonitor, ithreadSequenc
                 if (commandResponse != null) {
                     commandResponse = commandResponse.trim();
                     dataLen = commandResponse.length();
-                    CommonLib.PrintScreen(systemGlobal, String.format(" HSM %d rev: ", institutionIndex) + commandResponse,showLogEnum.SIMPLEMODE);
+                    CommonLib.PrintScreen(systemGlobal, String.format(" HSM %d rev: ", institutionIndex) + commandResponse, showLogEnum.SIMPLEMODE);
                     while (dataLen > 0) {
                         while (commandResponse.length() > 0) {
                             msgSecurity mSec = new msgSecurity(ParseHsmMessage(commandResponse));
 
-
-                            CommonLib.PrintScreen(systemGlobal, String.format("HSM (%s) REV\t  Type:%s  Value: %s  RC:%s  KCV: %s  from %s", institutionIndex + "", String.valueOf(mSec.getMsgSecType()), mSec.getHSMReturnValue(), mSec.getHsmErrCode(), mSec.getKeyCheckValue(), commandResponse),showLogEnum.DEFAULT);
+                            CommonLib.PrintScreen(systemGlobal, String.format("HSM (%s) REV\t  Type:%s  Value: %s  RC:%s  KCV: %s  from %s", institutionIndex + "", String.valueOf(mSec.getMsgSecType()), mSec.getHSMReturnValue(), mSec.getHsmErrCode(), mSec.getKeyCheckValue(), commandResponse), showLogEnum.DEFAULT);
                             if (mSec != null) {
 
                                 securityQueue.processSecObj(mSec);
-                            }
 
+         
+
+                            }
 
                             commandResponse = commandResponse.substring(mSec.getCommandLen()).trim();
 
@@ -397,7 +396,7 @@ public class hsmProcess extends Thread implements ithreadMonitor, ithreadSequenc
                     break;
             }
         } catch (Exception hsmErr) {
-            CommonLib.PrintScreen(systemGlobal, "ShowHSMDataMessage HSM Parsing Error: " + hsmMsg,showLogEnum.DETAILMODE );
+            CommonLib.PrintScreen(systemGlobal, "ShowHSMDataMessage HSM Parsing Error: " + hsmMsg, showLogEnum.DETAILMODE);
             resHsmVal.setCommandLen(hsmMsg.length());
         }
         return resHsmVal;

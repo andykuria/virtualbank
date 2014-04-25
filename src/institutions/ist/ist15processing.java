@@ -61,6 +61,7 @@ public class ist15processing implements iIssProcessing {
     @Override
     public IsoMessage getResponse(IsoMessage requestMsg) {
         IsoMessage rs = new IsoMessage();
+        rs.setSeqID(requestMsg.getSeqID());
         try {
             carddataLoader cd = new carddataLoader(carddata);
             cd.setInstCode(instScope);
@@ -96,54 +97,7 @@ public class ist15processing implements iIssProcessing {
                     }
                     break;
                 case CW:
-                    /*issAccount = cd.getCardInf(requestMsg.getField(2));
-                     balanceAmmount = issAccount.getIntValue("AvaiBalance");
-                     accBalance = issAccount.getValue("Balance");
-                     Integer transAmm = CommonLib.valueOf(requestMsg.getField(4));
-                     Integer creditAmm = 0;
-                     if (balanceAmmount >= transAmm) {
-                     creditAmm = balanceAmmount - transAmm;
-                     }
-                     String creditAmminStr = CommonLib.formatIntToString(creditAmm, issAccount.getValue("AvaiBalance").length());
-                     if (responseFmt != null) {
-                     List<String> fieldInFmt = responseFmt.getFieldKeys();
-                     for (String iFieldFMT : fieldInFmt) {
-                     fieldParser parseFieldi = new fieldParser(responseFmt.getValue(iFieldFMT));
-                     switch (parseFieldi.getType()) {
-                     case AUTO_DATE:
-                     rs.setField(CommonLib.valueOf(iFieldFMT), DateUtils.getCurrentDate());
-                     break;
-                     case AUTO_DATETIME:
-                     rs.setField(CommonLib.valueOf(iFieldFMT), DateUtils.getCurrentDateTime());
-                     break;
-                     case AUTO_TIME:
-                     rs.setField(CommonLib.valueOf(iFieldFMT), DateUtils.getTime());
-                     break;
-                     case AUTO_ORIGINAL:
-                     rs.setField(CommonLib.valueOf(iFieldFMT), requestMsg.getField(CommonLib.valueOf(iFieldFMT)));
-                     break;
-                     case TMP_ACC:
-
-                     String accRs = parseFieldi.getFieldValue().replace("{AB}", issAccount.getValue("AvaiBalance")).replace("{B}", issAccount.getValue("Balance"));
-
-                     rs.setField(CommonLib.valueOf(iFieldFMT), accRs);
-                     break;
-
-                     default:
-                     rs.setField(CommonLib.valueOf(iFieldFMT), parseFieldi.getFieldValue());
-
-                     }
-                     }
-
-                     }
-                     switch (issAccount.getIntValue("RC")) {
-                     case 0:
-                     rs.setField(54, creditAmminStr);
-                     break;
-                     default:
-                     rs.setField(54, "0000000000000000000000000000000000000000");
-
-                     }*/
+                  
                     if (checkIssData(requestMsg) != null) {
                         rs = processCW(requestMsg, responseFmt, cd);
                         rs.setMsgType(CommonLib.getMsgType(rs.getField(0)));
@@ -194,9 +148,19 @@ public class ist15processing implements iIssProcessing {
 
     private IsoMessage processAutoResponse(IsoMessage requestMsg, cfgNode responseFmt) {
         IsoMessage rs = new IsoMessage();
+        rs.setSeqID(requestMsg.getSeqID());
         rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
         rs.setDesInterfaceCode(requestMsg.getSourceInterfaceCode());
-        rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getSourceInterfaceCode()));
+        switch (requestMsg.getMsgType()) {
+            case NETWORK_REQUEST:
+            case NETWORK_RESPONSE:
+                rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getDesInterfaceCode()));
+                break;
+            default:
+                rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getSourceInterfaceCode()));
+                break;
+        }
+
         if (responseFmt != null) {
             List<String> fieldInFmt = responseFmt.getFieldKeys();
             for (String iFieldFMT : fieldInFmt) {

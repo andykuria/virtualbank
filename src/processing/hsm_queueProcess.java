@@ -102,6 +102,7 @@ public class hsm_queueProcess extends Thread {
                                 newPinCache.setPinText(msg.getField(52));
                                 newPinCache.setInterfaceCode(msg.getDesInterfaceCode());
                                 newPinCache.setHsmID(cmdHsm.getHsmCommandID());
+                                
                                 String pinKeyValue = newPinCache.getPinText() + newPinCache.getInterfaceCode();
                                 systemGlobalInfo.getPinMap().add(pinKeyValue.hashCode(), newPinCache);
                             }

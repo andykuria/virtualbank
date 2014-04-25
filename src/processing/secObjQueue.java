@@ -23,42 +23,42 @@ import unisim201401.systemLoader;
  * @author minhdbh
  */
 public class secObjQueue {
-    
+
     ConcurrentHashMap<Integer, secObjInfo> objSecurityQueue;
     systemMessageSecurityQueue smSecQueue;
     systemMessageFlowControl msgFlowControl;
     unisim201401.systemLoader systemGlobalInfo;
     hsmCommandQueue hsmQueue;
-    
+
     public void setHsmQueue(hsmCommandQueue hsmQueue) {
         this.hsmQueue = hsmQueue;
     }
-    
+
     public secObjQueue() {
         objSecurityQueue = new ConcurrentHashMap<>();
     }
-    
+
     public void addSecObj(secObjInfo newSecObj) {
         objSecurityQueue.put(CommonLib.valueOf(newSecObj.getHsmCommnadID()), newSecObj);
         CommonLib.PrintScreen(systemGlobalInfo, String.format("Sec Obj Queue add: CMD ID %s, MSG ID  %s, Type %s, zone %s", newSecObj.getHsmCommnadID(), newSecObj.getMsgID(), String.valueOf(newSecObj.getTypeOfSec()), newSecObj.getdZone()), showLogEnum.DETAILMODE);
     }
-    
+
     public void setSmSecQueue(systemMessageSecurityQueue smSecQueue) {
         this.smSecQueue = smSecQueue;
     }
-    
+
     public void setSystemGlobalInfo(systemLoader systemGlobalInfo) {
         this.systemGlobalInfo = systemGlobalInfo;
     }
-    
+
     public systemMessageFlowControl getMsgFlowControl() {
         return msgFlowControl;
     }
-    
+
     public void setMsgFlowControl(systemMessageFlowControl msgFlowControl) {
         this.msgFlowControl = msgFlowControl;
     }
-    
+
     public secObjInfo checkSecQueue(msgSecurity pSec) {
         secObjInfo rs = null;
         if (objSecurityQueue.keySet().contains(pSec.getHsmID())) {
@@ -66,36 +66,53 @@ public class secObjQueue {
         }
         return rs;
     }
-    
+
     public void removeSecObj(int pKeyID) {
         objSecurityQueue.remove(pKeyID);
     }
-    
+
     public boolean processSecObj(msgSecurity pSec) {
-        
+
         secObjInfo secInQueue = checkSecQueue(pSec);
         if (secInQueue != null) {
             objSecurityQueue.remove(CommonLib.valueOf(secInQueue.getHsmCommnadID()));
             IsoMessage msgSecCheck = smSecQueue.checkMessage(secInQueue);
             try {
                 if (msgSecCheck != null) {
-                    
+
                     if (CommonLib.valueOf(pSec.getHsmErrCode()) == 0) {
+
+                        switch (pSec.getMsgSecType()) {
+
+                            case NET_TAK_TRANSLATE_ZMK_LMK:
+                            case NET_ZPK_TRASLATE_ZMK_LMK:
+                                instBOX cfgChanged = new instBOX(secInQueue.getMsgID(), pSec.getMsgSecType(), "IN", pSec.getHSMReturnValue(), msgSecCheck.getSourceInterfaceCode());
+                                systemGlobalInfo.getCfgSecurityChangedMap().add(cfgChanged.getBoxID(), cfgChanged);
+                                break;
+                            case NET_TAK_GENERATE_ZMK:
+                            case NET_ZPK_GENERATE_ZMK:
+                                cfgChanged = new instBOX(secInQueue.getMsgID(), pSec.getMsgSecType(), "OUT", pSec.getHSMReturnValue(), msgSecCheck.getSourceInterfaceCode());
+                                systemGlobalInfo.getCfgSecurityChangedMap().add(cfgChanged.getBoxID(), cfgChanged);
+                                break;
+                        }
                         switch (pSec.getMsgSecType()) {
                             case IN_NEED_OF_MACVER:
                             case IN_NEED_OF_MACVER_MD5:
                             case NET_TAK_TRANSLATE_ZMK_LMK:
                             case NET_ZPK_TRASLATE_ZMK_LMK:
-                            
+                                smSecQueue.removeMessage(secInQueue.getMsgID());
+                                IsoMessage updatedMsg = systemGlobalInfo.getINFSecurityUtils(msgSecCheck.getSourceInterfaceCode()).updateSecurity(msgSecCheck, pSec);
+                                msgFlowControl.enqueueMessage(updatedMsg);
+                                break;
                             case IN_NEED_OF_MACGEN:
-                            
+
                             case IN_NEED_OF_PIN:
                             case NET_TAK_GENERATE_ZMK:
                             case NET_ZPK_GENERATE_ZMK:
-                            
+
                             case IN_NEED_OF_MACGEN_MD5:
                                 smSecQueue.removeMessage(secInQueue.getMsgID());
-                                IsoMessage updatedMsg = systemGlobalInfo.getINFSecurityUtils(msgSecCheck.getDesInterfaceCode()).updateSecurity(msgSecCheck, pSec);
+                                updatedMsg = systemGlobalInfo.getINFSecurityUtils(msgSecCheck.getDesInterfaceCode()).updateSecurity(msgSecCheck, pSec);
                                 msgFlowControl.enqueueMessage(updatedMsg);
                                 break;
                             case IN_NEED_GEN_PIN_ZPK:
@@ -107,7 +124,7 @@ public class secObjQueue {
                                     pinIncache.setPinBlockInHex(pSec.getHSMReturnValue());
                                     systemGlobalInfo.getPinMap().replace(pinCachedKey, pinIncache);
                                 }
-                                
+
                                 msgFlowControl.enqueueMessage(updatedMsg);
                                 break;
                             case IN_NEED_GEN_PIN:
@@ -128,29 +145,15 @@ public class secObjQueue {
                                 cmdHsm.setMsgType(newSecReq.getTypeOfSec());
                                 cmdHsm.setCommandHSM(systemGlobalInfo.getINFSecurityUtils(msgSecCheck.getDesInterfaceCode()).getSecCommand(msgSecCheck, newSecReq).getCommandHSM());
                                 hsmQueue.addNewCmd(cmdHsm);
-                                
+
                                 break;
-                            
+
                         }
-                        
-                        switch (pSec.getMsgSecType()) {
-                            
-                            case NET_TAK_TRANSLATE_ZMK_LMK:
-                            case NET_ZPK_TRASLATE_ZMK_LMK:
-                                instBOX cfgChanged = new instBOX(secInQueue.getMsgID(), pSec.getMsgSecType(), "IN", pSec.getHSMReturnValue(), pSec.getInstitutionCode());
-                                systemGlobalInfo.getCfgSecurityChangedMap().add(cfgChanged.getBoxID(), cfgChanged);
-                                break;
-                            case NET_TAK_GENERATE_ZMK:
-                            case NET_ZPK_GENERATE_ZMK: 
-                                cfgChanged = new instBOX(secInQueue.getMsgID(), pSec.getMsgSecType(), "OUT", pSec.getHSMReturnValue(), pSec.getInstitutionCode());
-                                systemGlobalInfo.getCfgSecurityChangedMap().add(cfgChanged.getBoxID(), cfgChanged);
-                                break;
-                        }
-                        
+
                     } else {
                         CommonLib.PrintScreen(systemGlobalInfo, "ERR HQP: HSM ID " + pSec.getHsmID(), showLogEnum.DETAILMODE);
                         String errCode = "05";
-                        
+
                         if (CommonLib.valueOf(pSec.getHsmErrCode()) > 0) {
                             switch (pSec.getMsgSecType()) {
                                 case IN_NEED_OF_MACVER:
@@ -170,7 +173,7 @@ public class secObjQueue {
                                 //msgSecCheck = systemGlobalInfo.getReplyMsgServiceByCode(msgSecCheck.getSourceInterfaceCode()).makeAutoResponseMsg(msgSecCheck, errCode);
                                 //msgSecCheck.setSecRequest(systemGlobalInfo.getInstitutionData(msgSecCheck.getDesInterfaceCode()).getProcessingService().getSecurityQueueResponseFinacial(msgSecCheck));
                                 break;
-                            
+
                             case 800:
                             case 820:
                             case 821:
@@ -187,19 +190,20 @@ public class secObjQueue {
                             // CommonLib.PrintScreen(String.format("ERR HQP (%s) - %s (%s): %s ", institutionName, "DROP", String.valueOf(mSec.getMsgSecType()), msgSecCheck.getTraceInfo()));
 
                         }
-                        
+
                     }
                     if (msgSecCheck.getMsgType() != IsoMessageType.DROP) {
                         // msgFlowControlQueue.enqueueMessage(msgSecCheck);
                     }
                 }
-                
+
             } catch (Exception ex) {
                 CommonLib.PrintScreen(systemGlobalInfo, String.format("ERR HQP : %s", ex.getMessage()), showLogEnum.DETAILMODE);
             }
         } else {
+            return false;
         }
-        
+
         return true;
     }
 }

@@ -104,6 +104,8 @@ public class systemMessageProcessing extends Thread {
                                 break;
                             case NETWORK_REQUEST:
                                 imsg.setSecRequest(systemGlobalInfo.getINFSecurityUtils(imsg.getSourceInterfaceCode()));
+                                //imsg.setDesInterfaceCode(imsg.getSourceInterfaceCode());
+                                //imsg.setSourceInterfaceCode("");
                                 msgFlowControlQueue.enqueueMessage(imsg);
                                 break;
                             case NETWORK_RESPONSE:
