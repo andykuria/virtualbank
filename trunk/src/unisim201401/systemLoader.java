@@ -482,4 +482,37 @@ public class systemLoader {
         return null;
     }
 
+    public void reloadCFG(cfgType typeOfCfg) {
+        switch (typeOfCfg) {
+            case ROUTING_TABLE:
+                routingCfg.reLoadCFG();
+                break;
+            case CARD:
+                issCardData.reloadCfg();
+                break;
+            case ISS_RESPONSE:
+                issResformat.reloadCfg();
+                break;
+            case PATTRENDATA:
+                patternLoader.reloadCfg();
+                break;
+            case BANK:
+                for (int i = 0; i < instCfg.length; i++) {
+                    instCfg[i].reLoadCFG();
+                }
+                break;
+            default:
+                routingCfg.reLoadCFG();
+
+                issCardData.reloadCfg();
+                issResformat.reloadCfg();
+                patternLoader.reloadCfg();
+                //isoFormatLodaer.reloadCfg();
+                for (int i = 0; i < instCfg.length; i++) {
+                    instCfg[i].reLoadCFG();
+                }
+        }
+
+    }
+
 }
