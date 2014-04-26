@@ -18,6 +18,7 @@ public enum cfgType {
     PATTRENDATA,
     ROUTING_TABLE,
     ISS_RESPONSE,
-    SCENARIO
+    SCENARIO,
+    UNKNOWN
     
 }

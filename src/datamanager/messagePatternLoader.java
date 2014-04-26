@@ -26,7 +26,8 @@ public class messagePatternLoader {
 
     public static List<String> getFilesInFolder(String folderPath) {
         List<String> rs = new ArrayList<>();
-        for (final File fileEntry : new File(folderPath).listFiles()) {
+        usFileFilter xmlFilter=new usFileFilter();
+        for (final File fileEntry : new File(folderPath).listFiles(xmlFilter)) {
             if (!fileEntry.isDirectory()) {
                 rs.add(fileEntry.getName());
             }
@@ -193,4 +194,16 @@ public class messagePatternLoader {
         }
         return null;
     }
+    
+    public void reloadCfg()
+    {
+        if (cfgFiles!=null)
+        {
+            for(int i=0;i<cfgFiles.length;i++)
+            {
+                cfgFiles[i].reLoadCFG();
+            }
+        }
+    }
+    
 }

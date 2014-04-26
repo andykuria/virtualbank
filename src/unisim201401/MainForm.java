@@ -7,6 +7,7 @@ package unisim201401;
 
 import cfg.cfgNode;
 import cfg.cfgParser;
+import cfg.cfgType;
 import cfg.nodeType;
 import datamanager.fieldParser;
 import datamanager.fieldType;
@@ -20,6 +21,8 @@ import iss.showLogEnum;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +32,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import lib.CommonLib;
 import lib.DateUtils;
@@ -61,6 +65,7 @@ public class MainForm extends javax.swing.JFrame {
         buttonGroup1 = new javax.swing.ButtonGroup();
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
+        popmnuReloadCfg = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cmbACQ = new javax.swing.JComboBox();
@@ -101,14 +106,22 @@ public class MainForm extends javax.swing.JFrame {
         chkSimpleFollow = new javax.swing.JCheckBox();
         chkCnns = new javax.swing.JCheckBox();
         chkDetails = new javax.swing.JCheckBox();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        btClearReversal = new javax.swing.JButton();
+        btReloadCfg = new javax.swing.JButton();
+        btResetCnn = new javax.swing.JButton();
+        btResetHsm = new javax.swing.JButton();
         chkReversal = new javax.swing.JCheckBox();
         txtReversal = new javax.swing.JTextField();
         jLabel10 = new javax.swing.JLabel();
         btSimSet = new javax.swing.JButton();
+        btSaveIssCfg = new javax.swing.JButton();
+        btShowCfg = new javax.swing.JButton();
+        btClearLogs = new javax.swing.JButton();
+        btHsmTools = new javax.swing.JButton();
+        btFlushData = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        cbFontSize = new javax.swing.JComboBox();
+        btFontSet = new javax.swing.JButton();
         cmbTransType = new javax.swing.JComboBox();
         jScrollPane4 = new javax.swing.JScrollPane();
         txtOutput = new javax.swing.JTextArea();
@@ -442,17 +455,27 @@ public class MainForm extends javax.swing.JFrame {
 
         jPanel6.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(22, 2, 360, -1));
 
-        jButton2.setText("Clear Reversal");
-        jPanel6.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 148, 130, -1));
+        btClearReversal.setText("Clear Reversal");
+        btClearReversal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearReversalActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btClearReversal, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 148, 130, -1));
 
-        jButton3.setText("Reload config");
-        jPanel6.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 177, 130, -1));
+        btReloadCfg.setText("Reload config");
+        btReloadCfg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btReloadCfgActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btReloadCfg, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 175, 130, -1));
 
-        jButton4.setText("Reset Cnns");
-        jPanel6.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 148, 110, -1));
+        btResetCnn.setText("Reset Cnns");
+        jPanel6.add(btResetCnn, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 148, 115, -1));
 
-        jButton5.setText("Reset HSM");
-        jPanel6.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 177, 110, -1));
+        btResetHsm.setText("Reset HSM");
+        jPanel6.add(btResetHsm, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 175, 115, -1));
 
         chkReversal.setText("Auto send reversal after");
         jPanel6.add(chkReversal, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 120, -1, -1));
@@ -469,7 +492,41 @@ public class MainForm extends javax.swing.JFrame {
                 btSimSetActionPerformed(evt);
             }
         });
-        jPanel6.add(btSimSet, new org.netbeans.lib.awtextra.AbsoluteConstraints(152, 278, 87, -1));
+        jPanel6.add(btSimSet, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 290, 87, -1));
+
+        btSaveIssCfg.setText("Save ISS config");
+        btSaveIssCfg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btSaveIssCfgActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btSaveIssCfg, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 148, 120, -1));
+
+        btShowCfg.setText("Show config");
+        jPanel6.add(btShowCfg, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 175, 120, -1));
+
+        btClearLogs.setText("Clear logs");
+        btClearLogs.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btClearLogsActionPerformed(evt);
+            }
+        });
+        jPanel6.add(btClearLogs, new org.netbeans.lib.awtextra.AbsoluteConstraints(15, 205, 130, -1));
+
+        btHsmTools.setText("Tools HSM");
+        jPanel6.add(btHsmTools, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 205, 115, -1));
+
+        btFlushData.setText("Flush data");
+        jPanel6.add(btFlushData, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 205, 120, -1));
+
+        jLabel6.setText("Font Log size: ");
+        jPanel6.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 240, -1, -1));
+
+        cbFontSize.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "10", "11", "12", "13", "14", "15" }));
+        jPanel6.add(cbFontSize, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, -1, -1));
+
+        btFontSet.setText("Set");
+        jPanel6.add(btFontSet, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 240, -1, -1));
 
         cmbTransType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "FINACIAL", "NETWORK", "SCENARIO" }));
         cmbTransType.addActionListener(new java.awt.event.ActionListener() {
@@ -729,7 +786,7 @@ public class MainForm extends javax.swing.JFrame {
                     }
                     buildMessage.setMessageState(true);
                     buildMessage.setMsgType(CommonLib.getMsgType(buildMessage.getField(0)));
-                    buildMessage.setDesInterfaceCode(cmbACQ.getSelectedItem().toString() );
+                    buildMessage.setDesInterfaceCode(cmbACQ.getSelectedItem().toString());
                     systemData.getIcmQueue().add(buildMessage);
                     txtOutput.setText(txtOutput.getText() + "\n\r" + new String(buildMessage.toByte()));
                     if (nodeType.valueOf(cmbTransType.getSelectedItem().toString()) == nodeType.REVERSAL) {
@@ -838,6 +895,27 @@ public class MainForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_btREVSendActionPerformed
 
+    private void btSaveIssCfgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveIssCfgActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btSaveIssCfgActionPerformed
+
+    private void btClearReversalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearReversalActionPerformed
+        // TODO add your handling code here:
+        systemData.getReversalMap().clear();
+        updateListReversal();
+    }//GEN-LAST:event_btClearReversalActionPerformed
+
+    private void btClearLogsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearLogsActionPerformed
+        // TODO add your handling code here:
+        txtOutput.setText("");
+    }//GEN-LAST:event_btClearLogsActionPerformed
+
+    private void btReloadCfgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btReloadCfgActionPerformed
+        // TODO add your handling code here:
+        //systemData.reloadCFG();
+        popmnuReloadCfg.show(btReloadCfg, btReloadCfg.getWidth() - 15, btReloadCfg.getHeight() - 5);
+    }//GEN-LAST:event_btReloadCfgActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -895,6 +973,7 @@ public class MainForm extends javax.swing.JFrame {
          cardList.toArray(cardsArray);
          cmbCards.setModel(new DefaultComboBoxModel(cardsArray));*/
         pack();
+        initPopupmnuReload();
         //getContentPane().add(cmbACQ, BorderLayout.SOUTH);
         //http://www.coderanch.com/t/529195/GUI/java/set-ID-JCombobox
     }
@@ -955,14 +1034,48 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JLabel lblFields[];
     private javax.swing.JTextField txtFields[];
     private HashMap<String, JTextField> mappingMNField;
+
+    private void initPopupmnuReload() {
+        JMenuItem menuRouting = new JMenuItem("Routing config");
+        menuRouting.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg(cfgType.ROUTING_TABLE)"));
+        JMenuItem menuCardData = new JMenuItem("Card data");
+        JMenuItem menuIssResp = new JMenuItem("Iss response fmt");
+        JMenuItem menuInstCfg = new JMenuItem("Institution Cfg");
+        JMenuItem menuAllCfg = new JMenuItem("All cfg");
+
+        // Create a popup menu
+        popmnuReloadCfg.add(menuRouting);
+        popmnuReloadCfg.add(menuCardData);
+        popmnuReloadCfg.add(menuIssResp);
+        popmnuReloadCfg.add(menuInstCfg);
+        popmnuReloadCfg.addSeparator();
+        popmnuReloadCfg.add(menuAllCfg);
+    }
+
+    private void processPopupMnuReloadCfg(cfgType typeForReload) {
+        
+
+    }
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btClearLogs;
+    private javax.swing.JButton btClearReversal;
+    private javax.swing.JButton btFlushData;
+    private javax.swing.JButton btFontSet;
+    private javax.swing.JButton btHsmTools;
     private javax.swing.JButton btREVSend;
+    private javax.swing.JButton btReloadCfg;
+    private javax.swing.JButton btResetCnn;
+    private javax.swing.JButton btResetHsm;
+    private javax.swing.JButton btSaveIssCfg;
     private javax.swing.JButton btSendPattern;
     private javax.swing.JButton btSet;
+    private javax.swing.JButton btShowCfg;
     private javax.swing.JButton btSimSet;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.ButtonGroup buttonGroup3;
+    private javax.swing.JComboBox cbFontSize;
     private javax.swing.JCheckBox chkCnns;
     private javax.swing.JCheckBox chkDetails;
     private javax.swing.JCheckBox chkMAC;
@@ -972,16 +1085,13 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JComboBox cmbCards;
     private javax.swing.JComboBox cmbTransType;
     private javax.swing.JComboBox cmbType;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
@@ -998,6 +1108,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JList lstReversal;
     private javax.swing.JPanel pnFields1;
     private javax.swing.JPanel pnFields2;
+    private javax.swing.JPopupMenu popmnuReloadCfg;
     private javax.swing.JRadioButton rtAuthAuto;
     private javax.swing.JRadioButton rtAuthManual;
     private javax.swing.JRadioButton rtAuthNone;
