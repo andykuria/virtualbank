@@ -206,4 +206,9 @@ public class messagePatternLoader {
         }
     }
     
+    public cfgParser[] toArray()
+    {
+       return cfgFiles; 
+    }
+    
 }
