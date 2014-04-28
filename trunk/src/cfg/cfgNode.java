@@ -236,4 +236,18 @@ public class cfgNode {
         }
         return false;
     }
+
+    public String toString() {
+        String rs = "";
+        rs = String.format("<%s %s> ", nodeID, nodeAtts.toString());
+        for (Map.Entry<String, String> entry : nodeValues.entrySet()) {
+
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            rs += String.format("\n\r\t<%s>%s</>", key, value);
+        }
+
+        return rs;
+    }
 }

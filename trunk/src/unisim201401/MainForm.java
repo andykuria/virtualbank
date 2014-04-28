@@ -21,6 +21,7 @@ import iss.showLogEnum;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
@@ -32,6 +33,7 @@ import java.util.Vector;
 import javax.swing.BorderFactory;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JTextField;
 import lib.CommonLib;
@@ -66,6 +68,7 @@ public class MainForm extends javax.swing.JFrame {
         buttonGroup2 = new javax.swing.ButtonGroup();
         buttonGroup3 = new javax.swing.ButtonGroup();
         popmnuReloadCfg = new javax.swing.JPopupMenu();
+        popupmnuShowCfg = new javax.swing.JPopupMenu();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         cmbACQ = new javax.swing.JComboBox();
@@ -503,6 +506,11 @@ public class MainForm extends javax.swing.JFrame {
         jPanel6.add(btSaveIssCfg, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 148, 120, -1));
 
         btShowCfg.setText("Show config");
+        btShowCfg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btShowCfgActionPerformed(evt);
+            }
+        });
         jPanel6.add(btShowCfg, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 175, 120, -1));
 
         btClearLogs.setText("Clear logs");
@@ -916,6 +924,11 @@ public class MainForm extends javax.swing.JFrame {
         popmnuReloadCfg.show(btReloadCfg, btReloadCfg.getWidth() - 15, btReloadCfg.getHeight() - 5);
     }//GEN-LAST:event_btReloadCfgActionPerformed
 
+    private void btShowCfgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btShowCfgActionPerformed
+        // TODO add your handling code here:
+        popupmnuShowCfg.show(btShowCfg, btShowCfg.getWidth() - 15, btShowCfg.getHeight() - 5);
+    }//GEN-LAST:event_btShowCfgActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -974,6 +987,7 @@ public class MainForm extends javax.swing.JFrame {
          cmbCards.setModel(new DefaultComboBoxModel(cardsArray));*/
         pack();
         initPopupmnuReload();
+        initPopupmnuShowcfg();
         //getContentPane().add(cmbACQ, BorderLayout.SOUTH);
         //http://www.coderanch.com/t/529195/GUI/java/set-ID-JCombobox
     }
@@ -1037,24 +1051,92 @@ public class MainForm extends javax.swing.JFrame {
 
     private void initPopupmnuReload() {
         JMenuItem menuRouting = new JMenuItem("Routing config");
-        menuRouting.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg(cfgType.ROUTING_TABLE)"));
+        menuRouting.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg", cfgType.ROUTING_TABLE));
         JMenuItem menuCardData = new JMenuItem("Card data");
+        menuCardData.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg", cfgType.CARD));
         JMenuItem menuIssResp = new JMenuItem("Iss response fmt");
+        menuIssResp.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg", cfgType.ISS_RESPONSE));
         JMenuItem menuInstCfg = new JMenuItem("Institution Cfg");
-        JMenuItem menuAllCfg = new JMenuItem("All cfg");
+        menuInstCfg.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg", cfgType.BANK));
 
+        JMenuItem menupatternCfg = new JMenuItem("Pattern Cfg");
+        menupatternCfg.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg", cfgType.PATTRENDATA));
+
+        JMenuItem menuAllCfg = new JMenuItem("All cfg");
+        menuAllCfg.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuReloadCfg", cfgType.UNKNOWN));
         // Create a popup menu
         popmnuReloadCfg.add(menuRouting);
         popmnuReloadCfg.add(menuCardData);
         popmnuReloadCfg.add(menuIssResp);
         popmnuReloadCfg.add(menuInstCfg);
+        popmnuReloadCfg.add(menupatternCfg);
         popmnuReloadCfg.addSeparator();
         popmnuReloadCfg.add(menuAllCfg);
     }
 
-    private void processPopupMnuReloadCfg(cfgType typeForReload) {
-        
+    private void initPopupmnuShowcfg() {
+        JMenuItem menusystem = new JMenuItem("System config");
+        menusystem.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuShowCfg", cfgType.SYSTEM));
 
+        JMenuItem menuRouting = new JMenuItem("Routing config");
+        menuRouting.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuShowCfg", cfgType.ROUTING_TABLE));
+
+        JMenuItem menuCardData = new JMenuItem("Card data");
+        menuCardData.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuShowCfg", cfgType.CARD));
+
+        JMenuItem menuIssResp = new JMenuItem("Iss response fmt");
+        menuIssResp.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuShowCfg", cfgType.ISS_RESPONSE));
+
+        JMenuItem menuInstCfg = new JMenuItem("Institution Cfg");
+        menuInstCfg.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuShowCfg", cfgType.BANK));
+
+        JMenuItem menupatternCfg = new JMenuItem("Pattern Cfg");
+        menupatternCfg.addActionListener(ListenerProxies.actionListener(this, "processPopupMnuShowCfg", cfgType.PATTRENDATA));
+
+        // Create a popup menu
+        popupmnuShowCfg.add(menusystem);
+        popupmnuShowCfg.add(menuRouting);
+        popupmnuShowCfg.addSeparator();
+        popupmnuShowCfg.add(menuCardData);
+        popupmnuShowCfg.add(menuIssResp);
+        popupmnuShowCfg.add(menuInstCfg);
+        popupmnuShowCfg.add(menupatternCfg);
+
+    }
+
+    public void processPopupMnuReloadCfg(ActionEvent event, cfgType typeForReload) {
+
+        systemData.reloadCFG(typeForReload);
+
+    }
+
+    public void processPopupMnuShowCfg(ActionEvent event, cfgType typeForReload) {
+        configurationInfo ci = new configurationInfo();
+        ci.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        switch (typeForReload) {
+            case SYSTEM:
+                ci.setListOfCfg(new cfgParser[]{systemData.getSystemConfig()});
+
+                break;
+            case ROUTING_TABLE:
+                ci.setListOfCfg(new cfgParser[]{systemData.getcfgRouting()});
+                break;
+            case CARD:
+                ci.setListOfCfg(systemData.getIssCardData().toArray());
+                break;
+            case BANK:
+                ci.setListOfCfg(systemData.getInstArray());
+                break;
+            case ISS_RESPONSE:
+                ci.setListOfCfg(systemData.getIssResformat().toArray());
+                break;
+            case PATTRENDATA:
+                ci.setListOfCfg(systemData.getPatternObj().toArray());
+                break;
+        }
+        ci.initCfgShow();
+        ci.setVisible(true);
+        //systemData.reloadCFG(typeForReload);
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1109,6 +1191,7 @@ public class MainForm extends javax.swing.JFrame {
     private javax.swing.JPanel pnFields1;
     private javax.swing.JPanel pnFields2;
     private javax.swing.JPopupMenu popmnuReloadCfg;
+    private javax.swing.JPopupMenu popupmnuShowCfg;
     private javax.swing.JRadioButton rtAuthAuto;
     private javax.swing.JRadioButton rtAuthManual;
     private javax.swing.JRadioButton rtAuthNone;

@@ -514,5 +514,11 @@ public class systemLoader {
         }
 
     }
+    
+    public cfgParser[] getInstArray()
+    {
+        return instCfg;
+    }
+    
 
 }

@@ -5,6 +5,8 @@
  */
 package unisim201401;
 
+
+import cfg.cfgType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.lang.reflect.InvocationHandler;
@@ -20,14 +22,14 @@ public class ListenerProxies {
     private static final Class<?>[] INTERFACES = {ActionListener.class};
 
     public static ActionListener actionListener(final Object target,
-            String method) {
+            String method, final cfgType typeofcfg) {
         final Method proxied = method(target, method);
         InvocationHandler handler = new InvocationHandler() {
             @Override
             public Object invoke(Object proxy, Method method, Object[] args)
                     throws Throwable {
                 ActionEvent event = (ActionEvent) args[0];
-                return proxied.invoke(target, event);
+                return proxied.invoke(target, event, (Object)typeofcfg);
             }
         };
         return (ActionListener) Proxy.newProxyInstance(target.getClass()
@@ -36,7 +38,9 @@ public class ListenerProxies {
 
     private static Method method(Object target, String method) {
         try {
-            return target.getClass().getMethod(method, ActionEvent.class);
+            //return target.getClass().getMethod(method, ActionEvent.class);
+            //return target.getClass().getMethod(method, ActionEvent.class, cfgType.class);
+            return target.getClass().getDeclaredMethod(method, ActionEvent.class, cfgType.class);
         } catch (NoSuchMethodException e) {
             throw new IllegalStateException(e);
         } catch (SecurityException e) {

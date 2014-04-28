@@ -13,6 +13,7 @@ import java.util.AbstractList;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.OutputKeys;
@@ -41,8 +42,6 @@ public class cfgParser {
     public void setSystemGlobal(systemLoader systemGlobal) {
         this.systemGlobal = systemGlobal;
     }
-    
-    
 
     public cfgParser() {
         xmlNode = new HashMap<>();
@@ -66,7 +65,7 @@ public class cfgParser {
             DocumentBuilder db = dbf.newDocumentBuilder();
             Document doc = db.parse(file);
             doc.getDocumentElement().normalize();
-            CommonLib.PrintScreen(systemGlobal, "Read Configuration from XML File: Root element " + doc.getDocumentElement().getNodeName(),showLogEnum.DETAILMODE);
+            CommonLib.PrintScreen(systemGlobal, "Read Configuration from XML File: Root element " + doc.getDocumentElement().getNodeName(), showLogEnum.DETAILMODE);
 
             NodeList nodeLst = doc.getElementsByTagName("UNI_SIM");
             CommonLib.PrintScreen(systemGlobal, "Load information of root cfg " + xmlCfgFile, showLogEnum.DETAILMODE);
@@ -135,25 +134,25 @@ public class cfgParser {
         List<cfgNode> rs = new ArrayList<>();
         String[] allKeyNode = (String[]) xmlNode.keySet().toArray(new String[0]);
         for (int i = 0; i < allKeyNode.length; i++) {
-            if (nodeTypeList.toUpperCase().indexOf(String.valueOf(xmlNode.get(allKeyNode[i]).getNodeType() ) ) < 0) {
+            if (nodeTypeList.toUpperCase().indexOf(String.valueOf(xmlNode.get(allKeyNode[i]).getNodeType())) < 0) {
                 rs.add(xmlNode.get(allKeyNode[i]));
             }
         }
 
         return rs;
     }
-    
+
     public List<cfgNode> getNodeType(nodeType nt) {
         List<cfgNode> rs = new ArrayList<>();
         String[] allKeyNode = (String[]) xmlNode.keySet().toArray(new String[0]);
         for (int i = 0; i < allKeyNode.length; i++) {
-            if (nt==xmlNode.get(allKeyNode[i]).getNodeType() )  {
+            if (nt == xmlNode.get(allKeyNode[i]).getNodeType()) {
                 rs.add(xmlNode.get(allKeyNode[i]));
             }
         }
 
         return rs;
-    } 
+    }
 
     public cfgNode getXmlNode(String orgName) {
         cfgNode rs;
@@ -276,13 +275,26 @@ public class cfgParser {
         return nodeKeys;
     }
 
-    public String getABsolutePath()
-    {
+    public String getABsolutePath() {
         return xmlFileCfg;
     }
+
     public String getFileName() {
         String[] allPaths = xmlFileCfg.split("/");
         return allPaths[allPaths.length - 1];
     }
 
+    public String toString() {
+        String rs = "";
+        rs = String.format("<%s> --%s", String.valueOf(xmlType), xmlFileCfg);
+
+        for (Map.Entry<String, cfgNode> entry : xmlNode.entrySet()) {
+
+            String key = entry.getKey();
+            cfgNode value = entry.getValue();
+
+            rs += "\n\r"+value.toString();
+        }
+        return rs;
+    }
 }
