@@ -514,11 +514,31 @@ public class systemLoader {
         }
 
     }
-    
-    public cfgParser[] getInstArray()
-    {
+
+    public cfgParser[] getInstArray() {
         return instCfg;
     }
+
+    public cfgParser getCfgInstByFileName(String fileName) {
+        cfgParser rs = null;
+        for (cfgParser cfg : instCfg) {
+            if (cfg.getFileName().equals(fileName)) {
+                return cfg;
+            }
+        }
+
+        return rs;
+    }
     
+    public String getScopeByInstName(String instName) {
+        
+        for (cfgParser cfg : instCfg) {
+            if (cfg.getValue("INSTITUTION", "INTERFACECODE").toUpperCase().equals(instName.toUpperCase())) {
+                return cfg.getValue("INSTITUTION", "SCOPE");
+            }
+        }
+
+        return "";
+    }
 
 }
