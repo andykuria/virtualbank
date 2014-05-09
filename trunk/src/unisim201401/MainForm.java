@@ -26,6 +26,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -643,12 +644,13 @@ public class MainForm extends javax.swing.JFrame {
         theModel.removeAllElements();
         if (cmbACQ.getSelectedItem() != null) {
 
-            List<String> allType = systemData.getPatternObj().getAllTransactionType(nodeType.valueOf(cmbTransType.getSelectedItem().toString()), cmbACQ.getSelectedItem().toString());
+            String scope = systemData.getScopeByInstName(cmbACQ.getSelectedItem().toString());
+            List<String> allType = systemData.getPatternObj().getAllTransactionType(nodeType.valueOf(cmbTransType.getSelectedItem().toString()), scope);
             String[] TypeArray = new String[allType.size()];
             allType.toArray(TypeArray);
             cmbType.setModel(new DefaultComboBoxModel(TypeArray));
 
-            List<String> cardList = systemData.getPatternObj().getAllCards((cmbACQ.getSelectedItem() != null) ? cmbACQ.getSelectedItem().toString() : "");
+            List<String> cardList = systemData.getPatternObj().getAllCards((cmbACQ.getSelectedItem() != null) ? scope : "");
             String[] cardsArray = new String[cardList.size()];
             cardList.toArray(cardsArray);
             cmbCards.setModel(new DefaultComboBoxModel(cardsArray));
@@ -905,6 +907,11 @@ public class MainForm extends javax.swing.JFrame {
 
     private void btSaveIssCfgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSaveIssCfgActionPerformed
         // TODO add your handling code here:
+        cfgParser[] issCfgData = systemData.getIssCardData().toArray();
+        for (cfgParser cfg : issCfgData) {
+            cfg.saveCfg(cfg.getABsolutePath());
+        }
+
     }//GEN-LAST:event_btSaveIssCfgActionPerformed
 
     private void btClearReversalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btClearReversalActionPerformed
@@ -970,8 +977,17 @@ public class MainForm extends javax.swing.JFrame {
         cfgParser systemCFG = systemData.getSystemConfig();
         cfgNode instNode = systemCFG.getXmlNode("BANK-PROFILE");
         List<String> allInsts = instNode.getFieldKeys();
+
+        List<String> instName = new LinkedList<>();
         String[] InsArray = new String[allInsts.size()];
-        allInsts.toArray(InsArray);
+        for (String nodeValue : instNode.getFieldKeys()) {
+            cfgParser cfgInst = systemData.getCfgInstByFileName(instNode.getValue(nodeValue));
+            if (cfgInst != null) {
+                instName.add(cfgInst.getValue("INSTITUTION", "INTERFACECODE"));
+            }
+        }
+        instName.toArray(InsArray);
+        //allInsts.toArray(InsArray);
 
         DefaultComboBoxModel theModel = (DefaultComboBoxModel) cmbACQ.getModel();
         theModel.removeAllElements();
@@ -990,6 +1006,12 @@ public class MainForm extends javax.swing.JFrame {
         initPopupmnuShowcfg();
         //getContentPane().add(cmbACQ, BorderLayout.SOUTH);
         //http://www.coderanch.com/t/529195/GUI/java/set-ID-JCombobox
+    }
+
+    private String getScopeByInstitution(String pInstitution) {
+
+        return systemData.getScopeByInstName(pInstitution);
+
     }
 
     private void buildCustomControl(cfgNode nodeNeedToBuild) {
