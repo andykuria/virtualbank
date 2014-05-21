@@ -11,8 +11,10 @@ import cfg.nodeType;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 import lib.CommonLib;
 
 /**
@@ -26,7 +28,7 @@ public class messagePatternLoader {
 
     public static List<String> getFilesInFolder(String folderPath) {
         List<String> rs = new ArrayList<>();
-        usFileFilter xmlFilter=new usFileFilter();
+        usFileFilter xmlFilter = new usFileFilter();
         for (final File fileEntry : new File(folderPath).listFiles(xmlFilter)) {
             if (!fileEntry.isDirectory()) {
                 rs.add(fileEntry.getName());
@@ -63,7 +65,7 @@ public class messagePatternLoader {
     }
 
     public List<cfgNode> getNodeNotInScope(String exceptNodeList, String scope) {
-        List<cfgNode> rs = new ArrayList<>();
+        List<cfgNode> rs = new LinkedList<>();
         for (int i = 0; i < size(); i++) {
             cfgNode header = cfgFiles[i].getXmlNode("header");
             if (header != null) {
@@ -76,7 +78,7 @@ public class messagePatternLoader {
     }
 
     public List<cfgNode> getNodeInScope(nodeType nt, String scope) {
-        List<cfgNode> rs = new ArrayList<>();
+        List<cfgNode> rs = new LinkedList<>();
         for (int i = 0; i < size(); i++) {
             cfgNode header = cfgFiles[i].getXmlNode("header");
             if (header != null) {
@@ -88,8 +90,21 @@ public class messagePatternLoader {
         return rs;
     }
 
+    public List<cfgNode> getNodeByDes(nodeType nt, String pDes) {
+        List<cfgNode> rs = new LinkedList<>();
+        for (int i = 0; i < size(); i++) {
+            for (cfgNode tmpnode : cfgFiles[i].getNodeType(nt)) {
+                if (tmpnode.getNodeAtt("des").toUpperCase().equals(pDes.toUpperCase())) {
+                    rs.addAll(cfgFiles[i].getNodeType(nt));
+                }
+            }
+
+        }
+        return rs;
+    }
+
     public List<String> getAllExceptTransactionType(String exceptNodeList, String scope) {
-        List<String> rs = new ArrayList<>();
+        List<String> rs = new LinkedList<>();
         List<cfgNode> allNodes = getNodeNotInScope(exceptNodeList, scope);
         if (allNodes.size() > 0) {
             for (int i = 0; i < allNodes.size(); i++) {
@@ -101,33 +116,65 @@ public class messagePatternLoader {
         return rs;
     }
 
-    public List<String> getAllTransactionType(nodeType nt, String scope) {
-        List<String> rs = new ArrayList<>();
-        List<cfgNode> allNodes = getNodeInScope(nt, scope);
+    public List<String> getAllTransactionType(nodeType nt, String pInst, String scope, boolean isAllinScope) {
+        List<String> rs = new LinkedList<>();
+        List<cfgNode> allNodes = new LinkedList<>();
+        Set<String> rsInSet=new LinkedHashSet();
+        switch (nt) {
+            case SCENARIO:
+                allNodes = getNodeInScope(nt, scope);
+                break;
+            default:
+                if (isAllinScope) {
+                    allNodes = getNodeInScope(nt, scope);
+                } else {
+                    allNodes = getNodeByDes(nt, pInst);
+                }
+        }
+        //
         if (allNodes.size() > 0) {
             for (int i = 0; i < allNodes.size(); i++) {
 
-                rs.add(allNodes.get(i).getNodeID() + "(" + allNodes.get(i).getFileName() + ")");
+                //rs.add(allNodes.get(i).getNodeID() + "(" + allNodes.get(i).getFileName() + ")");
+                rsInSet.add(allNodes.get(i).getNodeID() + "(" + allNodes.get(i).getFileName() + ")");
 
             }
         }
+        rs.addAll(rsInSet);
+        
         return rs;
     }
 
     public List<String> getAllCards(String scope) {
         //Use only for PARRTEN XML
-        List<String> rs = new ArrayList<>();
+        List<String> rs = new LinkedList<>();
+        Set<String> rsInSet=new LinkedHashSet();
         for (int i = 0; i < size(); i++) {
             cfgNode header = cfgFiles[i].getXmlNode("header");
             if (header.getValue("SCOPE").toUpperCase().equals(scope.toUpperCase())) {
                 String[] cardMarks = header.getValue("ACQ_CARDS").split(",");
                 for (int icardmark = 0; icardmark < cardMarks.length; icardmark++) {
                     String[] cardlist = header.getValue(cardMarks[icardmark]).split(",");
-                    rs.addAll(Arrays.asList(cardlist));
+                    rsInSet.addAll(Arrays.asList(cardlist));
+                    //rs.addAll(Arrays.asList(cardlist));
                 }
             }
         }
+        rs.addAll(rsInSet);
         return rs;
+    }
+    
+    private boolean checkValue(List<String> dataDic, String checkVal)
+    {
+        for(String testVal:dataDic)
+        {
+            if (testVal.toUpperCase().equals(checkVal.toUpperCase()))
+            {
+                return false;
+            }
+                    
+        }
+        return false;
     }
 
     public cfgNode getTempNode(String xmlFile, String nodeName) {
@@ -158,7 +205,7 @@ public class messagePatternLoader {
                     break;
                 case SCENARIO:
                     break;
-                
+
                 default:
             }
 
@@ -167,7 +214,7 @@ public class messagePatternLoader {
     }
 
     public List<cfgNode> getNode(String pNode) {
-        List<cfgNode> rs = new ArrayList<>();
+        List<cfgNode> rs = new LinkedList<>();
         for (int i = 0; i < size(); i++) {
 
             rs.add(cfgFiles[i].getXmlNode(pNode));
@@ -176,7 +223,7 @@ public class messagePatternLoader {
     }
 
     public List<cfgNode> getNodeByType(nodeType pType) {
-        List<cfgNode> rs = new ArrayList<>();
+        List<cfgNode> rs = new LinkedList<>();
         for (int i = 0; i < size(); i++) {
 
             rs.addAll(cfgFiles[i].getNodeType(pType));
@@ -194,21 +241,17 @@ public class messagePatternLoader {
         }
         return null;
     }
-    
-    public void reloadCfg()
-    {
-        if (cfgFiles!=null)
-        {
-            for(int i=0;i<cfgFiles.length;i++)
-            {
+
+    public void reloadCfg() {
+        if (cfgFiles != null) {
+            for (int i = 0; i < cfgFiles.length; i++) {
                 cfgFiles[i].reLoadCFG();
             }
         }
     }
-    
-    public cfgParser[] toArray()
-    {
-       return cfgFiles; 
+
+    public cfgParser[] toArray() {
+        return cfgFiles;
     }
-    
+
 }
