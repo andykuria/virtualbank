@@ -14,6 +14,7 @@ import iss.iIssProcessing;
 import iso8583.IsoMessage;
 import iso8583.msg8583Type;
 import iss.issSettings;
+import java.math.BigInteger;
 import java.util.List;
 import lib.CommonLib;
 import lib.DateUtils;
@@ -283,14 +284,14 @@ public class ist15processing implements iIssProcessing {
         rs.setSourceInterfaceCode(requestMsg.getDesInterfaceCode());
         rs.setIsoCfg(systemGlobalInfo.getIsoFormatByScope(rs.getSourceInterfaceCode()));
         cfgNode issAccount = cd.getCardInf(requestMsg.getField(2));
-        Integer balanceAmmount = issAccount.getIntValue("AvaiBalance");
+        long balanceAmmount =  Long.valueOf(issAccount.getValue("AvaiBalance"));
         String accBalance = issAccount.getValue("Balance");
-        Integer transAmm = CommonLib.valueOf(requestMsg.getField(4));
-        Integer creditAmm = 0;
+        long transAmm = Long.valueOf(requestMsg.getField(4));
+        long creditAmm=0;
         if (balanceAmmount >= transAmm) {
             creditAmm = balanceAmmount - transAmm;
         }
-        String creditAmminStr = CommonLib.formatIntToString(creditAmm, issAccount.getValue("AvaiBalance").length());
+        String creditAmminStr = CommonLib.formatIntToString(creditAmm , issAccount.getValue("AvaiBalance").length());
         if (responseFmt != null) {
             List<String> fieldInFmt = responseFmt.getFieldKeys();
             for (String iFieldFMT : fieldInFmt) {
@@ -331,6 +332,10 @@ public class ist15processing implements iIssProcessing {
         }
 
         if (rs.isMessage()) {
+            if (rs.getField(39).equals("00"))
+            {
+                cd.getCardInf(rs.getField(2)).setValue("AvaiBalance",CommonLib.formatIntToString(creditAmm,12));
+            }
             switch (systemGlobalInfo.getIssCfg().getRc().getType()) {
                 case AUTO:
                     switch (issAccount.getIntValue("RC")) {

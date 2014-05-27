@@ -263,6 +263,13 @@ public class CommonLib {
         return strInt;
 
     }
+    
+    public static String formatIntToString(long value, int fixedlen) {
+        String strInt = "";
+        strInt = String.format("%" + String.valueOf(fixedlen) + "d", value).replace(" ", "0");
+        return strInt;
+
+    }
 
     /**
      * Format an String value to String with fixed length
