@@ -112,6 +112,12 @@ public class cfgNode {
     public void setNodeValues(LinkedHashMap<String, String> nodeValues) {
         this.nodeValues = nodeValues;
     }
+    
+    public void setValue(String keyField, String value)
+    {
+        this.nodeValues.put(keyField.toUpperCase(), value);
+    }
+    
 
     public void addAttItem(String attKey, String attValues) {
         nodeAtts.put(attKey, attValues);
