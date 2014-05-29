@@ -6,6 +6,7 @@
 package unisim201401;
 
 import cfg.cfgParser;
+import java.io.PrintStream;
 import processing.delayTubeProcess;
 import processing.hsmCmdProcess;
 import processing.hsm_queueProcess;
@@ -24,9 +25,13 @@ public class Unisim201401 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        PrintStream defaultScreen=System.out;
 
         systemLoader systemParas = new systemLoader();
         systemParas.initSystemConfig();
+        
+        System.setOut(systemParas.getOutputLog(defaultScreen) );
+        
         MainForm frmsimulator = new MainForm();
         frmsimulator.setTitle(systemParas.getSystemConfig().getValue("GLOBAL", "SHOWNAME"));
         frmsimulator.setSystemData(systemParas);

@@ -343,6 +343,8 @@ public class CommonLib {
     public static void PrintScreen(systemLoader globalCfg, String messagetoPrint, showLogEnum typeOfLog) {
         if (messagetoPrint != "") {
             System.out.println("[" + DateUtils.getCurrentDateTime() + "]" + " " + messagetoPrint);
+            System.out.flush();
+            //globalCfg.addLogs(messagetoPrint);
             if (globalCfg != null) {
                 if (globalCfg.getTaLogs() != null) {
                     switch (typeOfLog) {
