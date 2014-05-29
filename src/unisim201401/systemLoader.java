@@ -32,10 +32,13 @@ import iso8583.IsoMessage;
 import iss.SimParas;
 import iss.iIssProcessing;
 import iss.issSettings;
+import java.io.PrintStream;
 import java.util.List;
 import javax.swing.JTextArea;
+import lib.DateUtils;
 import lib.instBOX;
 import lib.seqManager;
+import logs.DataLogObject;
 import processing.dataDictionary;
 import processing.delayTube;
 import processing.hsmCommandQueue;
@@ -87,7 +90,11 @@ public class systemLoader {
     private systemMessageFlowControl flowControlQueue;
     private networkConfigQueue cfgQueue;
 
+    private DataLogObject simLogs;
+
     public void initSystemConfig() {
+
+        simLogs = new DataLogObject(DateUtils.getCurrentDate(), "system", "all");
 
         sequencyService = new seqManager();
         reversalMap = new dataDictionary<>();
@@ -173,6 +180,7 @@ public class systemLoader {
         hsmCnns.setSystemGlobal(this);
         issCfg = new issSettings();
         delayQueue = new delayTube();
+
     }
 
     public iInstitutionSecurity getSecurityUtils(String zone) {
@@ -529,9 +537,9 @@ public class systemLoader {
 
         return rs;
     }
-    
+
     public String getScopeByInstName(String instName) {
-        
+
         for (cfgParser cfg : instCfg) {
             if (cfg.getValue("INSTITUTION", "INTERFACECODE").toUpperCase().equals(instName.toUpperCase())) {
                 return cfg.getValue("INSTITUTION", "SCOPE");
@@ -541,4 +549,23 @@ public class systemLoader {
         return "";
     }
 
+    public void addToLogFile(String pmessage) {
+        if (simLogs != null) {
+            simLogs.addData(pmessage);
+        }
+    }
+
+    public PrintStream getOutputLog(PrintStream defaultScreen) {
+        try {
+            return simLogs.getOutputStream();
+        } catch (Exception ex) {
+            return defaultScreen;
+        }
+    }
+
+    /*public void saveLogFile() {
+     if (simLogs != null) {
+     simLogs.saveToDisk();
+     }
+     }*/
 }

@@ -5,8 +5,13 @@
 package logs;
 
 import iss.showLogEnum;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import lib.DateUtils;
 import java.io.FileWriter;
+import java.io.PrintStream;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import lib.CommonLib;
@@ -63,6 +68,12 @@ public class DataLogObject {
                 CommonLib.PrintScreen(null, "Error in write file data to " + headerFileName + "_" + socketName + "_" + name + " on harddisk", showLogEnum.DETAILMODE);
             }
         }
+    }
+
+    public PrintStream getOutputStream() throws FileNotFoundException {
+        String filePath = LogUtils.getCurrentDirectory() + "/logs/" + DateUtils.getCurrentDate() + "_" + socketName + "_" + name;
+        //File outPut=new File(filePath);
+        return new PrintStream(new BufferedOutputStream(new FileOutputStream(filePath)));
     }
 
 }
